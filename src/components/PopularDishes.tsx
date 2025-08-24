@@ -1,5 +1,6 @@
 import { Star, Clock, Users } from 'lucide-react';
 import popularDishesImage from '@/assets/popular-dishes.jpg';
+import { Link } from 'react-router-dom';
 
 const PopularDishes = () => {
   const dishes = [
@@ -128,8 +129,8 @@ const PopularDishes = () => {
               Browse our complete menu or contact us for custom catering solutions
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="btn-primary">View Full Menu</button>
-              <button className="btn-secondary">Request Custom Quote</button>
+              <Link to="/menus" className="btn-primary text-center">View Full Menu</Link>
+              <Link to="/contact" className="btn-secondary text-center">Request Custom Quote</Link>
             </div>
           </div>
         </div>

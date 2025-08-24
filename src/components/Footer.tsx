@@ -100,22 +100,23 @@ const Footer = () => {
               <div className="flex items-start space-x-3">
                 <Phone className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
                 <div>
-                  <p className="text-background/80">+91 98765 43210</p>
-                  <p className="text-background/60 text-sm">Mon-Sat, 9AM-8PM</p>
+                  <p className="text-background/80">+91 9980066824</p>
+                  <p className="text-background/60 text-sm">Mon-Sun, 9AM-9PM</p>
                 </div>
               </div>
               <div className="flex items-start space-x-3">
                 <Mail className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
                 <div>
-                  <p className="text-background/80">hello@nourishindia.com</p>
-                  <p className="text-background/60 text-sm">We reply within 24hrs</p>
+                  <p className="text-background/80">nourishindiainfo@gmail.com</p>
+                  <p className="text-background/60 text-sm">We reply within 2-4hrs</p>
                 </div>
               </div>
               <div className="flex items-start space-x-3">
                 <MapPin className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
                 <div>
-                  <p className="text-background/80">123 Culinary Street</p>
-                  <p className="text-background/80">Mumbai, Maharashtra 400001</p>
+                  <p className="text-background/80"># 49-9, 4th Main, 5th Cross</p>
+                  <p className="text-background/80">Chikka Begur Gate, Kudlu Gate</p>
+                  <p className="text-background/80">Begur, BENGALURU - 560068</p>
                 </div>
               </div>
               <div className="flex items-start space-x-3">
@@ -134,7 +135,7 @@ const Footer = () => {
         <div className="border-t border-background/20 py-6">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <p className="text-background/60 text-sm">
-              © 2024 Nourish India. All rights reserved. Crafted with passion for culinary excellence.
+              © 2024 NOURISH INDIA PVT LTD. All rights reserved. Crafted with passion for culinary excellence.
             </p>
             <div className="flex space-x-6 text-sm">
               <Link to="/privacy" className="text-background/60 hover:text-primary transition-colors">

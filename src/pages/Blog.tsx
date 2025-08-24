@@ -1,6 +1,48 @@
 import { Calendar, User, Clock, ArrowRight } from 'lucide-react';
+import { useState } from 'react';
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
 
 const Blog = () => {
+  const [newsletterEmail, setNewsletterEmail] = useState('');
+  const [isSubscribing, setIsSubscribing] = useState(false);
+  const { toast } = useToast();
+
+  const handleNewsletterSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubscribing(true);
+
+    try {
+      if (!newsletterEmail || !newsletterEmail.includes('@')) {
+        throw new Error('Please enter a valid email address');
+      }
+
+      // Send newsletter subscription notification
+      const { error } = await supabase.functions.invoke('send-newsletter-email', {
+        body: { email: newsletterEmail }
+      });
+
+      if (error) {
+        throw error;
+      }
+
+      toast({
+        title: "Newsletter Subscription Successful!",
+        description: "Thank you for subscribing to our newsletter. You'll receive the latest updates and culinary tips.",
+      });
+
+      setNewsletterEmail('');
+    } catch (error: any) {
+      console.error('Newsletter subscription error:', error);
+      toast({
+        title: "Subscription Failed",
+        description: error.message || "There was an error subscribing to the newsletter. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubscribing(false);
+    }
+  };
   const blogPosts = [
     {
       id: 1,
@@ -252,16 +294,23 @@ const Blog = () => {
             and exclusive offers from Nourish India.
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+          <form onSubmit={handleNewsletterSubmit} className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
             <input
               type="email"
               placeholder="Enter your email"
+              value={newsletterEmail}
+              onChange={(e) => setNewsletterEmail(e.target.value)}
+              required
               className="flex-1 px-4 py-3 rounded-lg text-foreground focus:ring-2 focus:ring-white/50 focus:outline-none"
             />
-            <button className="px-8 py-3 bg-white text-foreground hover:bg-background rounded-lg font-medium transition-all duration-300">
-              Subscribe
+            <button 
+              type="submit"
+              disabled={isSubscribing}
+              className="px-8 py-3 bg-white text-foreground hover:bg-background rounded-lg font-medium transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isSubscribing ? 'Subscribing...' : 'Subscribe'}
             </button>
-          </div>
+          </form>
         </div>
       </section>
     </div>

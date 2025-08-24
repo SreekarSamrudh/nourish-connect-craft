@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { Phone, Mail, MapPin, Clock, Send } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -11,6 +13,8 @@ const Contact = () => {
     eventDate: '',
     customMessage: ''
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { toast } = useToast();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({
@@ -19,40 +23,83 @@ const Contact = () => {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Implement form submission logic
-    console.log('Form submitted:', formData);
-    alert('Thank you for your inquiry! We will get back to you soon.');
-    // Reset form
-    setFormData({
-      name: '',
-      email: '',
-      phone: '',
-      eventType: '',
-      guestCount: '',
-      eventDate: '',
-      customMessage: ''
-    });
+    setIsSubmitting(true);
+
+    try {
+      // Save to database
+      const { error: dbError } = await supabase
+        .from('inquiries')
+        .insert({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          event_type: formData.eventType || null,
+          guest_count: formData.guestCount ? parseInt(formData.guestCount) : null,
+          event_date: formData.eventDate || null,
+          custom_message: formData.customMessage || null,
+        });
+
+      if (dbError) {
+        throw new Error(`Database error: ${dbError.message}`);
+      }
+
+      // Send email notification
+      const { error: emailError } = await supabase.functions.invoke('send-inquiry-email', {
+        body: formData
+      });
+
+      if (emailError) {
+        console.warn('Email sending failed:', emailError);
+        // Don't throw here - form submission succeeded even if email failed
+      }
+
+      toast({
+        title: "Inquiry Submitted Successfully!",
+        description: "Thank you for your inquiry. We will get back to you within 2-4 hours.",
+      });
+
+      // Reset form
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        eventType: '',
+        guestCount: '',
+        eventDate: '',
+        customMessage: ''
+      });
+
+    } catch (error) {
+      console.error('Form submission error:', error);
+      toast({
+        title: "Submission Failed",
+        description: "There was an error submitting your inquiry. Please try again or contact us directly.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const contactInfo = [
     {
       icon: Phone,
       title: "Phone",
-      details: "+91 7843078495",
+      details: "+91 9980066824",
       description: "Call us for immediate assistance"
     },
     {
       icon: Mail,
       title: "Email",
-      details: "guptarohit145@gmail.com",
+      details: "nourishindiainfo@gmail.com",
       description: "Send us your detailed requirements"
     },
     {
       icon: MapPin,
       title: "Service Areas",
-      details: "Pan India",
+      details: "# 49-9, 4th Main, 5th Cross, Chikka Begur Gate, Skoda Service Center, Kudlu Gate, Begur, BENGALURU - 560068",
       description: "We cater events across India"
     },
     {
@@ -207,10 +254,11 @@ const Contact = () => {
 
                 <button
                   type="submit"
-                  className="w-full btn-primary flex items-center justify-center space-x-2 text-lg py-4"
+                  disabled={isSubmitting}
+                  className="w-full btn-primary flex items-center justify-center space-x-2 text-lg py-4 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <Send className="h-5 w-5" />
-                  <span>Send Inquiry</span>
+                  <span>{isSubmitting ? 'Sending...' : 'Send Inquiry'}</span>
                 </button>
               </form>
             </div>

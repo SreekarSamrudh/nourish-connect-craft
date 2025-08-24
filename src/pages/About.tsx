@@ -1,4 +1,5 @@
 import { Users, Award, Heart, Leaf } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const About = () => {
   const values = [
@@ -209,12 +210,18 @@ const About = () => {
             Contact us today to start planning your perfect celebration.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="btn-primary text-lg px-10 py-4">
+            <Link 
+              to="/contact"
+              className="btn-primary text-lg px-10 py-4 text-center"
+            >
               Get In Touch
-            </button>
-            <button className="px-10 py-4 border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground rounded-lg font-medium transition-all duration-300">
+            </Link>
+            <Link 
+              to="/services"
+              className="px-10 py-4 border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground rounded-lg font-medium transition-all duration-300 text-center"
+            >
               View Our Services
-            </button>
+            </Link>
           </div>
         </div>
       </section>

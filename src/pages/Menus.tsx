@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Leaf, Star, Clock } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Menus = () => {
   const [activeCategory, setActiveCategory] = useState('all');
@@ -213,9 +214,9 @@ const Menus = () => {
             We specialize in creating custom menus tailored to your specific dietary requirements 
             and cultural preferences. Let us design the perfect menu for your event.
           </p>
-          <button className="btn-primary text-lg px-10 py-4">
+          <Link to="/contact" className="btn-primary text-lg px-10 py-4 text-center">
             Request Custom Menu
-          </button>
+          </Link>
         </div>
       </section>
     </div>

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { ChevronDown, ChevronUp, Phone, Mail } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const FAQ = () => {
   const [openItems, setOpenItems] = useState<number[]>([]);
@@ -220,7 +221,7 @@ const FAQ = () => {
               </div>
               <div className="text-left">
                 <p className="font-medium">Call Us</p>
-                <p className="opacity-90">+91 7843078495</p>
+                <p className="opacity-90">+91 9980066824</p>
               </div>
             </div>
             
@@ -230,15 +231,18 @@ const FAQ = () => {
               </div>
               <div className="text-left">
                 <p className="font-medium">Email Us</p>
-                <p className="opacity-90">guptarohit145@gmail.com</p>
+                <p className="opacity-90">nourishindiainfo@gmail.com</p>
               </div>
             </div>
           </div>
           
           <div className="mt-8">
-            <button className="px-10 py-4 bg-white text-foreground hover:bg-background rounded-lg font-medium transition-all duration-300 transform hover:scale-105">
+            <Link 
+              to="/contact"
+              className="px-10 py-4 bg-white text-foreground hover:bg-background rounded-lg font-medium transition-all duration-300 transform hover:scale-105 text-center inline-block"
+            >
               Contact Us Today
-            </button>
+            </Link>
           </div>
         </div>
       </section>

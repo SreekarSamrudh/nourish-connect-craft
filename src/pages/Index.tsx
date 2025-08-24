@@ -1,6 +1,7 @@
 import HeroCarousel from '@/components/HeroCarousel';
 import ServiceHighlights from '@/components/ServiceHighlights';
 import PopularDishes from '@/components/PopularDishes';
+import { Link } from 'react-router-dom';
 
 const Index = () => {
   return (
@@ -35,12 +36,18 @@ const Index = () => {
             to grand festivities, we'll make it unforgettable.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="px-10 py-4 bg-white text-foreground hover:bg-background rounded-lg font-medium transition-all duration-300 transform hover:scale-105">
+            <Link 
+              to="/contact" 
+              className="px-10 py-4 bg-white text-foreground hover:bg-background rounded-lg font-medium transition-all duration-300 transform hover:scale-105 text-center"
+            >
               Request a Quote
-            </button>
-            <button className="px-10 py-4 border-2 border-white text-white hover:bg-white hover:text-foreground rounded-lg font-medium transition-all duration-300">
+            </Link>
+            <Link 
+              to="/menus" 
+              className="px-10 py-4 border-2 border-white text-white hover:bg-white hover:text-foreground rounded-lg font-medium transition-all duration-300 text-center"
+            >
               View Our Menus
-            </button>
+            </Link>
           </div>
         </div>
       </section>

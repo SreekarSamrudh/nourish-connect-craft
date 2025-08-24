@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Phone, Mail, MapPin, Clock, Facebook, Instagram, Twitter, Linkedin } from 'lucide-react';
-import logo from '@/assets/logo.png'; // Import your new logo
+import logo from '@/assets/logo.jpg'; 
 
 const Footer = () => {
   const socialLinks = [

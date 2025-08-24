@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Phone, Mail, MapPin, Clock, Facebook, Instagram, Twitter, Linkedin } from 'lucide-react';
+import logo from '@/assets/logo.png'; // Import your new logo
 
 const Footer = () => {
   const socialLinks = [
@@ -35,11 +36,10 @@ const Footer = () => {
           {/* Company Info */}
           <div className="lg:col-span-1">
             <div className="flex items-center space-x-3 mb-6">
-              <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
-                <span className="text-primary-foreground font-playfair font-bold text-xl">N</span>
-              </div>
+              {/* Use the imported logo here */}
+              <img src={logo} alt="Nourish India Logo" className="w-12 h-12 object-contain" />
               <div>
-                <h3 className="font-playfair font-bold text-xl">Nourish India</h3>
+                <h3 className="font-playfair font-bold text-xl">NOURISH INDIA PVT LTD</h3>
                 <p className="text-background/70 text-sm">A Symphony of Flavours</p>
               </div>
             </div>
@@ -114,9 +114,7 @@ const Footer = () => {
               <div className="flex items-start space-x-3">
                 <MapPin className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
                 <div>
-                  <p className="text-background/80"># 49-9, 4th Main, 5th Cross</p>
-                  <p className="text-background/80">Chikka Begur Gate, Kudlu Gate</p>
-                  <p className="text-background/80">Begur, BENGALURU - 560068</p>
+                  <p className="text-background/80"># 49-9, 4th Main, 5th Cross, Chikka Begur Gate, Skoda Service Center, Kudlu Gate, Begur, BENGALURU - 560068.</p>
                 </div>
               </div>
               <div className="flex items-start space-x-3">

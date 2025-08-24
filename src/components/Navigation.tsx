@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Menu, X, Phone, Mail } from 'lucide-react';
+import logo from '@/assets/logo.png'; 
 
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -43,9 +44,8 @@ const Navigation = () => {
         <div className="flex justify-between items-center py-4">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
-              <span className="text-primary-foreground font-playfair font-bold text-xl">N</span>
-            </div>
+            {/* Use the imported logo here */}
+            <img src={logo} alt="Nourish India Logo" className="w-12 h-12 object-contain" />
             <div>
               <h1 className="font-playfair font-bold text-2xl text-foreground">Nourish India</h1>
               <p className="text-muted-foreground text-sm -mt-1">A Symphony of Flavours</p>

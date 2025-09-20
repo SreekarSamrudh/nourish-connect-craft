@@ -11,7 +11,11 @@ const Contact = () => {
     eventType: '',
     guestCount: '',
     eventDate: '',
-    customMessage: ''
+    customMessage: '',
+    cuisinePreferences: '',
+    dietaryNeeds: '',
+    requiredCourses: '',
+    specificDishRequests: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
@@ -39,6 +43,7 @@ const Contact = () => {
           guest_count: formData.guestCount ? parseInt(formData.guestCount) : null,
           event_date: formData.eventDate || null,
           custom_message: formData.customMessage || null,
+          dietary_preferences: `Cuisine: ${formData.cuisinePreferences} | Dietary Needs: ${formData.dietaryNeeds} | Required Courses: ${formData.requiredCourses} | Specific Dishes: ${formData.specificDishRequests}`,
         });
 
       if (dbError) {
@@ -68,7 +73,11 @@ const Contact = () => {
         eventType: '',
         guestCount: '',
         eventDate: '',
-        customMessage: ''
+        customMessage: '',
+        cuisinePreferences: '',
+        dietaryNeeds: '',
+        requiredCourses: '',
+        specificDishRequests: ''
       });
 
     } catch (error) {
@@ -132,114 +141,192 @@ const Contact = () => {
             {/* Contact Form */}
             <div className="card-premium p-8">
               <h2 className="font-playfair text-3xl font-bold text-foreground mb-6">
-                Send Us Your Requirements
+                Event & Menu Planner
               </h2>
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div>
-                    <label htmlFor="name" className="block text-sm font-medium text-foreground mb-2">
-                      Full Name *
-                    </label>
-                    <input
-                      type="text"
-                      id="name"
-                      name="name"
-                      required
-                      value={formData.name}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
-                      placeholder="Your full name"
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-foreground mb-2">
-                      Email Address *
-                    </label>
-                    <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      required
-                      value={formData.email}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
-                      placeholder="your.email@example.com"
-                    />
+              <form onSubmit={handleSubmit} className="space-y-8">
+                {/* Your Event Details Section */}
+                <div>
+                  <h3 className="font-playfair text-xl font-semibold text-foreground mb-4 border-b border-border pb-2">
+                    Your Event Details
+                  </h3>
+                  <div className="space-y-6">
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div>
+                        <label htmlFor="name" className="block text-sm font-medium text-foreground mb-2">
+                          Full Name *
+                        </label>
+                        <input
+                          type="text"
+                          id="name"
+                          name="name"
+                          required
+                          value={formData.name}
+                          onChange={handleChange}
+                          className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
+                          placeholder="Your full name"
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="email" className="block text-sm font-medium text-foreground mb-2">
+                          Email Address *
+                        </label>
+                        <input
+                          type="email"
+                          id="email"
+                          name="email"
+                          required
+                          value={formData.email}
+                          onChange={handleChange}
+                          className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
+                          placeholder="your.email@example.com"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div>
+                        <label htmlFor="phone" className="block text-sm font-medium text-foreground mb-2">
+                          Phone Number *
+                        </label>
+                        <input
+                          type="tel"
+                          id="phone"
+                          name="phone"
+                          required
+                          value={formData.phone}
+                          onChange={handleChange}
+                          className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
+                          placeholder="+91 98765 43210"
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="eventType" className="block text-sm font-medium text-foreground mb-2">
+                          Event Type
+                        </label>
+                        <select
+                          id="eventType"
+                          name="eventType"
+                          value={formData.eventType}
+                          onChange={handleChange}
+                          className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
+                        >
+                          <option value="">Select event type</option>
+                          <option value="wedding">Wedding</option>
+                          <option value="corporate">Corporate Event</option>
+                          <option value="birthday">Birthday Party</option>
+                          <option value="anniversary">Anniversary</option>
+                          <option value="social">Social Gathering</option>
+                          <option value="other">Other</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div>
+                        <label htmlFor="guestCount" className="block text-sm font-medium text-foreground mb-2">
+                          Number of Guests
+                        </label>
+                        <input
+                          type="number"
+                          id="guestCount"
+                          name="guestCount"
+                          value={formData.guestCount}
+                          onChange={handleChange}
+                          className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
+                          placeholder="50"
+                          min="1"
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="eventDate" className="block text-sm font-medium text-foreground mb-2">
+                          Preferred Date
+                        </label>
+                        <input
+                          type="date"
+                          id="eventDate"
+                          name="eventDate"
+                          value={formData.eventDate}
+                          onChange={handleChange}
+                          className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
 
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div>
-                    <label htmlFor="phone" className="block text-sm font-medium text-foreground mb-2">
-                      Phone Number *
-                    </label>
-                    <input
-                      type="tel"
-                      id="phone"
-                      name="phone"
-                      required
-                      value={formData.phone}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
-                      placeholder="+91 98765 43210"
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="eventType" className="block text-sm font-medium text-foreground mb-2">
-                      Event Type
-                    </label>
-                    <select
-                      id="eventType"
-                      name="eventType"
-                      value={formData.eventType}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
-                    >
-                      <option value="">Select event type</option>
-                      <option value="wedding">Wedding</option>
-                      <option value="corporate">Corporate Event</option>
-                      <option value="birthday">Birthday Party</option>
-                      <option value="anniversary">Anniversary</option>
-                      <option value="social">Social Gathering</option>
-                      <option value="other">Other</option>
-                    </select>
-                  </div>
-                </div>
+                {/* Custom Menu Details Section */}
+                <div>
+                  <h3 className="font-playfair text-xl font-semibold text-foreground mb-4 border-b border-border pb-2">
+                    Custom Menu Details
+                  </h3>
+                  <div className="space-y-4">
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div>
+                        <label htmlFor="cuisinePreferences" className="block text-sm font-medium text-foreground mb-2">
+                          Cuisine Preferences
+                        </label>
+                        <input
+                          type="text"
+                          id="cuisinePreferences"
+                          name="cuisinePreferences"
+                          value={formData.cuisinePreferences}
+                          onChange={handleChange}
+                          className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
+                          placeholder="e.g., North Indian, South Indian, Continental"
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="dietaryNeeds" className="block text-sm font-medium text-foreground mb-2">
+                          Dietary Needs
+                        </label>
+                        <input
+                          type="text"
+                          id="dietaryNeeds"
+                          name="dietaryNeeds"
+                          value={formData.dietaryNeeds}
+                          onChange={handleChange}
+                          className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
+                          placeholder="e.g., Vegetarian, Vegan, Gluten-free, Jain"
+                        />
+                      </div>
+                    </div>
 
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div>
-                    <label htmlFor="guestCount" className="block text-sm font-medium text-foreground mb-2">
-                      Number of Guests
-                    </label>
-                    <input
-                      type="number"
-                      id="guestCount"
-                      name="guestCount"
-                      value={formData.guestCount}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
-                      placeholder="50"
-                      min="1"
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="eventDate" className="block text-sm font-medium text-foreground mb-2">
-                      Preferred Date
-                    </label>
-                    <input
-                      type="date"
-                      id="eventDate"
-                      name="eventDate"
-                      value={formData.eventDate}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
-                    />
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div>
+                        <label htmlFor="requiredCourses" className="block text-sm font-medium text-foreground mb-2">
+                          Required Courses
+                        </label>
+                        <input
+                          type="text"
+                          id="requiredCourses"
+                          name="requiredCourses"
+                          value={formData.requiredCourses}
+                          onChange={handleChange}
+                          className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
+                          placeholder="e.g., Appetizers, Main Course, Desserts"
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="specificDishRequests" className="block text-sm font-medium text-foreground mb-2">
+                          Specific Dish Requests
+                        </label>
+                        <input
+                          type="text"
+                          id="specificDishRequests"
+                          name="specificDishRequests"
+                          value={formData.specificDishRequests}
+                          onChange={handleChange}
+                          className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
+                          placeholder="e.g., Biryani, Paneer Butter Masala"
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
 
                 <div>
                   <label htmlFor="customMessage" className="block text-sm font-medium text-foreground mb-2">
-                    Additional Requirements
+                    Additional Notes
                   </label>
                   <textarea
                     id="customMessage"
@@ -248,7 +335,7 @@ const Contact = () => {
                     value={formData.customMessage}
                     onChange={handleChange}
                     className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors resize-none"
-                    placeholder="Tell us about any specific dietary requirements, venue details, or special requests..."
+                    placeholder="Any additional details about venue, timing, special arrangements, or other requirements..."
                   ></textarea>
                 </div>
 

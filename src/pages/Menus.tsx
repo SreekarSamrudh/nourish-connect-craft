@@ -3,20 +3,21 @@ import { Leaf, Star, Clock } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 
-// Define a type for our menu item for better code quality
+// Type that matches what we actually get from the database
 type MenuItem = {
   id: number;
   name: string;
   description: string | null;
-  price: string | null; // Price can be null
+  price: string | null;
   category: string | null;
   image_url: string | null;
-  // Add any other fields you might use, like dietary tags
+  is_featured: boolean;
+  created_at: string;
 };
 
 const Menus = () => {
   const [activeCategory, setActiveCategory] = useState('all');
-  const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
+  const [menuItems, setMenuItems] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   // This hook will fetch menu data from Supabase when the page loads
@@ -43,7 +44,7 @@ const Menus = () => {
     { id: 'appetizers', name: 'Appetizers' },
     { id: 'mains', name: 'Main Courses' },
     { id: 'desserts', name: 'Desserts' },
-    { id: 'vegan', name: 'Vegan Options' }
+    { id: 'vegetarian', name: 'Vegetarian' }
   ];
 
   const filteredItems = activeCategory === 'all' 

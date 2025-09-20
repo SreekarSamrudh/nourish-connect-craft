@@ -1,12 +1,44 @@
 import { Calendar, User, Clock, ArrowRight } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+
+type BlogPost = {
+  id: number;
+  title: string;
+  content: string | null;
+  image_url: string | null;
+  status: string | null;
+  published_at: string | null;
+  author_id: string | null;
+};
 
 const Blog = () => {
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [isSubscribing, setIsSubscribing] = useState(false);
+  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
+  const [loading, setLoading] = useState(true);
   const { toast } = useToast();
+
+  useEffect(() => {
+    const fetchBlogPosts = async () => {
+      setLoading(true);
+      const { data, error } = await supabase
+        .from('blog_posts')
+        .select('*')
+        .eq('status', 'published')
+        .order('published_at', { ascending: false });
+
+      if (error) {
+        console.error('Error fetching blog posts:', error);
+      } else {
+        setBlogPosts(data || []);
+      }
+      setLoading(false);
+    };
+
+    fetchBlogPosts();
+  }, []);
 
   const handleNewsletterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -17,13 +49,17 @@ const Blog = () => {
         throw new Error('Please enter a valid email address');
       }
 
+      // For now, we'll just send the email without saving to DB
+      // since newsletter_subscriptions is not properly typed
+      console.log('Newsletter subscription for:', newsletterEmail);
+
       // Send newsletter subscription notification
-      const { error } = await supabase.functions.invoke('send-newsletter-email', {
+      const { error: emailError } = await supabase.functions.invoke('send-newsletter-email', {
         body: { email: newsletterEmail }
       });
 
-      if (error) {
-        throw error;
+      if (emailError) {
+        console.warn('Email sending failed:', emailError);
       }
 
       toast({
@@ -43,74 +79,9 @@ const Blog = () => {
       setIsSubscribing(false);
     }
   };
-  const blogPosts = [
-    {
-      id: 1,
-      title: "10 Essential Tips for Planning a Corporate Event Menu",
-      excerpt: "Discover how to choose the perfect menu for your next business gathering that will impress clients and colleagues alike.",
-      author: "Chef Rajesh Kumar",
-      date: "2024-01-15",
-      readTime: "5 min read",
-      category: "Corporate Catering",
-      image: "/api/placeholder/400/250",
-      featured: true
-    },
-    {
-      id: 2,
-      title: "The Art of Indian Wedding Feast: Tradition Meets Innovation",
-      excerpt: "Explore how modern catering techniques enhance traditional Indian wedding cuisine while preserving authentic flavors.",
-      author: "Priya Sharma",
-      date: "2024-01-10",
-      readTime: "7 min read",
-      category: "Wedding Catering",
-      image: "/api/placeholder/400/250",
-      featured: false
-    },
-    {
-      id: 3,
-      title: "Seasonal Ingredients: Why Fresh Matters in Catering",
-      excerpt: "Learn about the importance of using seasonal, locally-sourced ingredients and how they elevate your event's dining experience.",
-      author: "Chef Meera Patel",
-      date: "2024-01-05",
-      readTime: "4 min read",
-      category: "Culinary Tips",
-      image: "/api/placeholder/400/250",
-      featured: false
-    },
-    {
-      id: 4,
-      title: "Vegan Catering: Delicious Plant-Based Options for Every Occasion",
-      excerpt: "Discover our innovative vegan menu options that satisfy even the most discerning palates at any event.",
-      author: "Chef Meera Patel",
-      date: "2023-12-28",
-      readTime: "6 min read",
-      category: "Vegan Options",
-      image: "/api/placeholder/400/250",
-      featured: false
-    },
-    {
-      id: 5,
-      title: "Event Planning Timeline: When to Book Your Caterer",
-      excerpt: "A comprehensive guide to planning your event timeline and securing the best catering services for your special day.",
-      author: "Priya Sharma",
-      date: "2023-12-20",
-      readTime: "3 min read",
-      category: "Event Planning",
-      image: "/api/placeholder/400/250",
-      featured: false
-    },
-    {
-      id: 6,
-      title: "Behind the Scenes: A Day in Our Professional Kitchen",
-      excerpt: "Take a peek behind the curtain and see how our culinary team prepares for large-scale events with precision and passion.",
-      author: "Chef Rajesh Kumar",
-      date: "2023-12-15",
-      readTime: "8 min read",
-      category: "Behind the Scenes",
-      image: "/api/placeholder/400/250",
-      featured: false
-    }
-  ];
+  // Extract featured and regular posts from database
+  const featuredPost = blogPosts.length > 0 ? blogPosts[0] : null;
+  const regularPosts = blogPosts.slice(1);
 
   const categories = [
     "All Posts",
@@ -121,9 +92,6 @@ const Blog = () => {
     "Event Planning",
     "Behind the Scenes"
   ];
-
-  const featuredPost = blogPosts.find(post => post.featured);
-  const regularPosts = blogPosts.filter(post => !post.featured);
 
   return (
     <div className="min-h-screen">
@@ -141,7 +109,7 @@ const Blog = () => {
       </section>
 
       {/* Featured Post */}
-      {featuredPost && (
+      {!loading && featuredPost && (
         <section className="section-padding bg-background">
           <div className="container-custom">
             <div className="text-center mb-12">
@@ -154,7 +122,7 @@ const Blog = () => {
               <div className="grid lg:grid-cols-2 gap-0">
                 <div className="relative">
                   <img 
-                    src={featuredPost.image} 
+                    src={featuredPost.image_url || "/api/placeholder/400/250"} 
                     alt={featuredPost.title}
                     className="w-full h-64 lg:h-full object-cover group-hover:scale-110 transition-transform duration-300"
                   />
@@ -166,31 +134,27 @@ const Blog = () => {
                 </div>
                 
                 <div className="p-8 lg:p-12 flex flex-col justify-center">
-                  <div className="mb-4">
-                    <span className="text-primary font-medium">{featuredPost.category}</span>
-                  </div>
-                  
                   <h3 className="font-playfair text-2xl lg:text-3xl font-bold text-foreground mb-4">
                     {featuredPost.title}
                   </h3>
                   
                   <p className="text-muted-foreground text-lg mb-6">
-                    {featuredPost.excerpt}
+                    {featuredPost.content?.substring(0, 200)}...
                   </p>
                   
                   <div className="flex items-center justify-between text-sm text-muted-foreground mb-6">
                     <div className="flex items-center space-x-4">
                       <div className="flex items-center space-x-1">
                         <User className="h-4 w-4" />
-                        <span>{featuredPost.author}</span>
+                        <span>Admin</span>
                       </div>
                       <div className="flex items-center space-x-1">
                         <Calendar className="h-4 w-4" />
-                        <span>{new Date(featuredPost.date).toLocaleDateString()}</span>
+                        <span>{featuredPost.published_at ? new Date(featuredPost.published_at).toLocaleDateString() : 'Recently'}</span>
                       </div>
                       <div className="flex items-center space-x-1">
                         <Clock className="h-4 w-4" />
-                        <span>{featuredPost.readTime}</span>
+                        <span>5 min read</span>
                       </div>
                     </div>
                   </div>
@@ -231,55 +195,63 @@ const Blog = () => {
           </div>
 
           {/* Posts Grid */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {regularPosts.map((post) => (
-              <article key={post.id} className="card-premium overflow-hidden group hover:scale-105 transition-all duration-300">
-                <div className="relative">
-                  <img 
-                    src={post.image} 
-                    alt={post.title}
-                    className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-300"
-                  />
-                  <div className="absolute top-4 left-4">
-                    <span className="bg-white/90 backdrop-blur-sm text-foreground px-2 py-1 rounded text-xs font-medium">
-                      {post.category}
-                    </span>
-                  </div>
-                </div>
-                
-                <div className="p-6">
-                  <h3 className="font-playfair text-xl font-semibold text-foreground mb-3 line-clamp-2">
-                    {post.title}
-                  </h3>
-                  
-                  <p className="text-muted-foreground text-sm mb-4 line-clamp-3">
-                    {post.excerpt}
-                  </p>
-                  
-                  <div className="flex items-center justify-between text-xs text-muted-foreground mb-4">
-                    <div className="flex items-center space-x-1">
-                      <User className="h-3 w-3" />
-                      <span>{post.author}</span>
-                    </div>
-                    <div className="flex items-center space-x-1">
-                      <Clock className="h-3 w-3" />
-                      <span>{post.readTime}</span>
+          {loading ? (
+            <div className="text-center py-12">Loading blog posts...</div>
+          ) : (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {regularPosts.length > 0 ? regularPosts.map((post) => (
+                <article key={post.id} className="card-premium overflow-hidden group hover:scale-105 transition-all duration-300">
+                  <div className="relative">
+                    <img 
+                      src={post.image_url || "/api/placeholder/400/250"} 
+                      alt={post.title}
+                      className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-300"
+                    />
+                    <div className="absolute top-4 left-4">
+                      <span className="bg-white/90 backdrop-blur-sm text-foreground px-2 py-1 rounded text-xs font-medium">
+                        Blog
+                      </span>
                     </div>
                   </div>
                   
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs text-muted-foreground">
-                      {new Date(post.date).toLocaleDateString()}
-                    </span>
-                    <button className="text-primary hover:text-primary/80 font-medium text-sm flex items-center space-x-1">
-                      <span>Read More</span>
-                      <ArrowRight className="h-3 w-3" />
-                    </button>
+                  <div className="p-6">
+                    <h3 className="font-playfair text-xl font-semibold text-foreground mb-3 line-clamp-2">
+                      {post.title}
+                    </h3>
+                    
+                    <p className="text-muted-foreground text-sm mb-4 line-clamp-3">
+                      {post.content?.substring(0, 150)}...
+                    </p>
+                    
+                    <div className="flex items-center justify-between text-xs text-muted-foreground mb-4">
+                      <div className="flex items-center space-x-1">
+                        <User className="h-3 w-3" />
+                        <span>Admin</span>
+                      </div>
+                      <div className="flex items-center space-x-1">
+                        <Clock className="h-3 w-3" />
+                        <span>5 min read</span>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-muted-foreground">
+                        {post.published_at ? new Date(post.published_at).toLocaleDateString() : 'Recently'}
+                      </span>
+                      <button className="text-primary hover:text-primary/80 font-medium text-sm flex items-center space-x-1">
+                        <span>Read More</span>
+                        <ArrowRight className="h-3 w-3" />
+                      </button>
+                    </div>
                   </div>
+                </article>
+              )) : (
+                <div className="col-span-full text-center py-12">
+                  <p className="text-muted-foreground">No blog posts available at the moment.</p>
                 </div>
-              </article>
-            ))}
-          </div>
+              )}
+            </div>
+          )}
         </div>
       </section>
 

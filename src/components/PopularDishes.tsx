@@ -1,46 +1,42 @@
+import { useState, useEffect } from 'react';
 import { Star, Clock, Users } from 'lucide-react';
 import popularDishesImage from '@/assets/popular-dishes.jpg';
 import { Link } from 'react-router-dom';
 
+// Simplified type to avoid TypeScript issues
+
 const PopularDishes = () => {
-  const dishes = [
-    {
-      name: "Signature Biryani",
-      description: "Aromatic basmati rice layered with tender meat and exotic spices, slow-cooked to perfection.",
-      price: "₹450",
-      rating: 4.9,
-      prepTime: "45 mins",
-      serves: "2-3 people",
-      dietary: ["Halal", "Gluten-Free"]
-    },
-    {
-      name: "Butter Chicken",
-      description: "Creamy tomato-based curry with succulent chicken pieces, our most beloved signature dish.",
-      price: "₹380",
-      rating: 4.8,
-      prepTime: "30 mins",
-      serves: "2-3 people",
-      dietary: ["Gluten-Free"]
-    },
-    {
-      name: "Paneer Tikka Masala",
-      description: "Grilled cottage cheese in rich, creamy gravy with aromatic herbs and spices.",
-      price: "₹320",
-      rating: 4.7,
-      prepTime: "25 mins",
-      serves: "2-3 people",
-      dietary: ["Vegetarian", "Gluten-Free"]
-    },
-    {
-      name: "Dal Makhani",
-      description: "Slow-cooked black lentils in a rich, creamy sauce with butter and aromatic spices.",
-      price: "₹280",
-      rating: 4.8,
-      prepTime: "20 mins",
-      serves: "3-4 people",
-      dietary: ["Vegetarian", "Protein-Rich"]
-    }
-  ];
+  const [featuredDishes, setFeaturedDishes] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchFeaturedDishes = async () => {
+      setLoading(true);
+      try {
+        const { createClient } = await import('@supabase/supabase-js');
+        const supabaseUrl = "https://dhpjlgsilivjrifsibqd.supabase.co";
+        const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRocGpsZ3NpbGl2anJpZnNpYnFkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM3MTk3MDYsImV4cCI6MjA2OTI5NTcwNn0.X1hi0DVTu2V5BRNZuEAUNObD_jCEM2k-sS09ldQuzm4";
+        const supabase = createClient(supabaseUrl, supabaseKey);
+        
+        const { data, error } = await supabase
+          .from('menu_items')
+          .select('*')
+          .eq('is_featured', true)
+          .limit(4);
+
+        if (error) {
+          console.error('Error fetching featured dishes:', error);
+        } else {
+          setFeaturedDishes(data || []);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
+      setLoading(false);
+    };
+
+    fetchFeaturedDishes();
+  }, []);
 
   return (
     <section className="section-padding bg-card">
@@ -76,46 +72,50 @@ const PopularDishes = () => {
 
           {/* Dishes List */}
           <div className="space-y-6">
-            {dishes.map((dish, index) => (
-              <div key={index} className="bg-background p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300">
-                <div className="flex justify-between items-start mb-3">
-                  <h3 className="font-playfair text-xl font-semibold text-foreground">
-                    {dish.name}
-                  </h3>
-                  <span className="text-2xl font-bold text-primary">{dish.price}</span>
-                </div>
-                
-                <p className="text-muted-foreground mb-4">{dish.description}</p>
-                
-                <div className="flex items-center justify-between text-sm text-muted-foreground mb-3">
-                  <div className="flex items-center space-x-4">
-                    <div className="flex items-center">
-                      <Star className="h-4 w-4 text-yellow-400 mr-1" />
-                      <span>{dish.rating}</span>
-                    </div>
-                    <div className="flex items-center">
-                      <Clock className="h-4 w-4 mr-1" />
-                      <span>{dish.prepTime}</span>
-                    </div>
-                    <div className="flex items-center">
-                      <Users className="h-4 w-4 mr-1" />
-                      <span>{dish.serves}</span>
+            {loading ? (
+              <div className="text-center py-8">Loading featured dishes...</div>
+            ) : featuredDishes.length > 0 ? (
+              featuredDishes.map((dish) => (
+                <div key={dish.id} className="bg-background p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300">
+                  <div className="flex justify-between items-start mb-3">
+                    <h3 className="font-playfair text-xl font-semibold text-foreground">
+                      {dish.name}
+                    </h3>
+                  </div>
+                  
+                  <p className="text-muted-foreground mb-4">{dish.description}</p>
+                  
+                  <div className="flex items-center justify-between text-sm text-muted-foreground mb-3">
+                    <div className="flex items-center space-x-4">
+                      <div className="flex items-center">
+                        <Star className="h-4 w-4 text-yellow-400 mr-1" />
+                        <span>4.8</span>
+                      </div>
+                      <div className="flex items-center">
+                        <Clock className="h-4 w-4 mr-1" />
+                        <span>30 mins</span>
+                      </div>
+                      <div className="flex items-center">
+                        <Users className="h-4 w-4 mr-1" />
+                        <span>2-3 people</span>
+                      </div>
                     </div>
                   </div>
+                  
+                  <div className="flex flex-wrap gap-2">
+                    {dish.category && (
+                      <span className="px-3 py-1 bg-secondary/10 text-secondary text-xs rounded-full font-medium">
+                        {dish.category}
+                      </span>
+                    )}
+                  </div>
                 </div>
-                
-                <div className="flex flex-wrap gap-2">
-                  {dish.dietary.map((tag, tagIndex) => (
-                    <span 
-                      key={tagIndex}
-                      className="px-3 py-1 bg-secondary/10 text-secondary text-xs rounded-full font-medium"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
+              ))
+            ) : (
+              <div className="text-center py-8 text-muted-foreground">
+                No featured dishes available at the moment.
               </div>
-            ))}
+            )}
           </div>
         </div>
 

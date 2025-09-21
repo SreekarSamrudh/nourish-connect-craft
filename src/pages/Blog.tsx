@@ -41,44 +41,55 @@ const Blog = () => {
     fetchBlogPosts();
   }, []);
 
-  const handleNewsletterSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubscribing(true);
+const handleNewsletterSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setIsSubscribing(true);
 
-    try {
-      if (!newsletterEmail || !newsletterEmail.includes('@')) {
-        throw new Error('Please enter a valid email address');
-      }
-
-      // Send newsletter subscription notification - database managed via Supabase dashboard
-      console.log('Newsletter subscription for:', newsletterEmail);
-
-      // Send newsletter subscription notification
-      const { error: emailError } = await supabase.functions.invoke('send-newsletter-email', {
-        body: { email: newsletterEmail }
-      });
-
-      if (emailError) {
-        console.warn('Email sending failed:', emailError);
-      }
-
-      toast({
-        title: "Newsletter Subscription Successful!",
-        description: "Thank you for subscribing to our newsletter. You'll receive the latest updates and culinary tips.",
-      });
-
-      setNewsletterEmail('');
-    } catch (error: any) {
-      console.error('Newsletter subscription error:', error);
-      toast({
-        title: "Subscription Failed",
-        description: error.message || "There was an error subscribing to the newsletter. Please try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsSubscribing(false);
+  try {
+    if (!newsletterEmail || !newsletterEmail.includes('@')) {
+      throw new Error('Please enter a valid email address');
     }
-  };
+
+    // ADD THIS BLOCK: First, save the email to the database
+    const { error: dbError } = await supabase
+      .from('newsletter_subscriptions')
+      .insert({ email: newsletterEmail });
+
+    if (dbError) {
+      // Handle cases where the email might already exist
+      if (dbError.code === '23505') { // Unique constraint violation
+        throw new Error('This email is already subscribed.');
+      }
+      throw new Error(`Database error: ${dbError.message}`);
+    }
+    
+    // Then, send the notification email
+    const { error: emailError } = await supabase.functions.invoke('send-newsletter-email', {
+      body: { email: newsletterEmail }
+    });
+
+    if (emailError) {
+      // This is not a critical error, so we just log it
+      console.warn('Email sending failed:', emailError);
+    }
+
+    toast({
+      title: "Subscription Successful!",
+      description: "Thank you for subscribing to our newsletter.",
+    });
+
+    setNewsletterEmail('');
+  } catch (error: any) {
+    console.error('Newsletter subscription error:', error);
+    toast({
+      title: "Subscription Failed",
+      description: error.message || "There was an error subscribing. Please try again.",
+      variant: "destructive",
+    });
+  } finally {
+    setIsSubscribing(false);
+  }
+};
   // Extract featured and regular posts from database
   const featuredPost = blogPosts.find(post => post.is_featured) || (blogPosts.length > 0 ? blogPosts[0] : null);
   const regularPosts = blogPosts.filter(post => !post.is_featured || post.id !== featuredPost?.id);

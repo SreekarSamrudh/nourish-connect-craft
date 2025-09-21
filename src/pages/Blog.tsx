@@ -11,6 +11,7 @@ type BlogPost = {
   status: string | null;
   published_at: string | null;
   author_id: string | null;
+  is_featured?: boolean | null;
 };
 
 const Blog = () => {
@@ -49,8 +50,7 @@ const Blog = () => {
         throw new Error('Please enter a valid email address');
       }
 
-      // For now, we'll just send the email without saving to DB
-      // since newsletter_subscriptions is not properly typed
+      // Send newsletter subscription notification - database managed via Supabase dashboard
       console.log('Newsletter subscription for:', newsletterEmail);
 
       // Send newsletter subscription notification
@@ -80,8 +80,8 @@ const Blog = () => {
     }
   };
   // Extract featured and regular posts from database
-  const featuredPost = blogPosts.length > 0 ? blogPosts[0] : null;
-  const regularPosts = blogPosts.slice(1);
+  const featuredPost = blogPosts.find(post => post.is_featured) || (blogPosts.length > 0 ? blogPosts[0] : null);
+  const regularPosts = blogPosts.filter(post => !post.is_featured || post.id !== featuredPost?.id);
 
   const categories = [
     "All Posts",

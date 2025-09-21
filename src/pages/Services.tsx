@@ -1,63 +1,46 @@
-import { Building, Calendar, Users, Utensils, CheckCircle, Star } from 'lucide-react';
+import { Building, GraduationCap, Heart, CheckCircle, Star, ArrowRight, Users, Utensils } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Services = () => {
   const services = [
     {
       icon: Building,
-      title: "Corporate Catering",
-      description: "Professional catering solutions for business meetings, conferences, and corporate events with sophisticated menu options.",
+      title: "Corporate Services",
+      description: "Professional catering solutions for businesses, offices, and corporate events. From daily cafe management to executive meetings.",
       features: [
+        "Office cafe management",
         "Executive lunch meetings",
-        "Conference catering packages", 
-        "Office party celebrations",
-        "Product launch events",
-        "Board meeting refreshments",
+        "Conference catering",
         "Team building events"
       ],
-      image: "/api/placeholder/600/400"
+      link: "/services/corporate",
+      gradient: "from-blue-500 to-blue-700"
     },
     {
-      icon: Calendar,
-      title: "Wedding Catering",
-      description: "Make your special day unforgettable with our exquisite wedding feast that blends tradition with contemporary elegance.",
+      icon: GraduationCap,
+      title: "Universities",
+      description: "Comprehensive dining solutions for educational institutions, student meal plans, and campus events.",
       features: [
-        "Multi-course wedding dinners",
-        "Traditional ceremony catering",
-        "Reception buffet services",
-        "Brunch celebrations",
-        "Rehearsal dinner packages",
-        "Custom dietary accommodations"
+        "Student meal plans",
+        "Campus cafe management",
+        "Faculty dining services",
+        "Graduation ceremonies"
       ],
-      image: "/api/placeholder/600/400"
+      link: "/services/universities",
+      gradient: "from-green-500 to-green-700"
     },
     {
-      icon: Users,
-      title: "Social Events",
-      description: "Perfect catering for birthdays, anniversaries, family gatherings, and social celebrations of all sizes.",
+      icon: Heart,
+      title: "Live Events",
+      description: "Make your special occasions unforgettable with our wedding catering, private celebrations, and milestone events.",
       features: [
-        "Birthday party catering",
-        "Anniversary celebrations",
-        "Family reunion meals",
-        "Holiday party services",
-        "Graduation celebrations",
-        "Community events"
+        "Wedding ceremonies",
+        "Private celebrations",
+        "Anniversary dinners",
+        "Cultural events"
       ],
-      image: "/api/placeholder/600/400"
-    },
-    {
-      icon: Utensils,
-      title: "Custom Menus",
-      description: "Tailored culinary experiences designed to meet your specific dietary preferences and event requirements.",
-      features: [
-        "Dietary restriction accommodations",
-        "Themed menu development",
-        "Seasonal specialty dishes",
-        "Cultural cuisine options",
-        "Fusion menu creation",
-        "Chef consultation services"
-      ],
-      image: "/api/placeholder/600/400"
+      link: "/services/live-events",
+      gradient: "from-rose-500 to-rose-700"
     }
   ];
 
@@ -79,32 +62,50 @@ const Services = () => {
       {/* Services Grid */}
       <section className="section-padding bg-background">
         <div className="container-custom">
-          <div className="grid lg:grid-cols-2 gap-12">
+          <div className="text-center mb-16">
+            <h2 className="font-playfair text-3xl md:text-4xl font-bold text-foreground mb-6">
+              Our Service Categories
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+              Specialized catering solutions designed for different environments and occasions
+            </p>
+          </div>
+
+          <div className="grid lg:grid-cols-3 gap-8">
             {services.map((service, index) => {
               const IconComponent = service.icon;
               return (
-                <div key={index} className="card-premium p-8 group hover:scale-105 transition-all duration-300">
-                  <div className="flex items-start space-x-6">
-                    <div className="w-16 h-16 bg-primary rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
-                      <IconComponent className="h-8 w-8 text-primary-foreground" />
+                <div key={index} className={`relative overflow-hidden rounded-2xl bg-gradient-to-br ${service.gradient} text-white group hover:scale-105 transition-all duration-300 shadow-xl`}>
+                  <div className="absolute inset-0 bg-black/20"></div>
+                  <div className="relative p-8 h-full flex flex-col">
+                    <div className="w-16 h-16 bg-white/20 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                      <IconComponent className="h-8 w-8 text-white" />
                     </div>
-                    <div className="flex-1">
-                      <h3 className="font-playfair text-2xl font-semibold text-foreground mb-3">
-                        {service.title}
-                      </h3>
-                      <p className="text-muted-foreground mb-6">
-                        {service.description}
-                      </p>
-                      
-                      <div className="grid sm:grid-cols-2 gap-3">
-                        {service.features.map((feature, featureIndex) => (
-                          <div key={featureIndex} className="flex items-center space-x-3">
-                            <CheckCircle className="h-5 w-5 text-secondary flex-shrink-0" />
-                            <span className="text-sm text-muted-foreground">{feature}</span>
-                          </div>
-                        ))}
-                      </div>
+                    
+                    <h3 className="font-playfair text-2xl font-bold mb-4">
+                      {service.title}
+                    </h3>
+                    
+                    <p className="text-white/90 mb-6 flex-grow">
+                      {service.description}
+                    </p>
+                    
+                    <div className="space-y-3 mb-8">
+                      {service.features.map((feature, featureIndex) => (
+                        <div key={featureIndex} className="flex items-center space-x-3">
+                          <CheckCircle className="h-4 w-4 text-white/80 flex-shrink-0" />
+                          <span className="text-sm text-white/90">{feature}</span>
+                        </div>
+                      ))}
                     </div>
+                    
+                    <Link 
+                      to={service.link}
+                      className="inline-flex items-center justify-center px-6 py-3 bg-white text-gray-900 rounded-lg font-medium hover:bg-white/90 transition-all duration-300 group-hover:shadow-lg"
+                    >
+                      Learn More
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Link>
                   </div>
                 </div>
               );

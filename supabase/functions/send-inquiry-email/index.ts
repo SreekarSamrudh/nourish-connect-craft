@@ -17,6 +17,10 @@ interface InquiryEmailRequest {
   guestCount?: string;
   eventDate?: string;
   customMessage?: string;
+  cuisinePreferences?: string;
+  dietaryNeeds?: string;
+  requiredCourses?: string;
+  specificDishRequests?: string;
 }
 
 const handler = async (req: Request): Promise<Response> => {
@@ -67,13 +71,23 @@ const handler = async (req: Request): Promise<Response> => {
         <li><strong>Preferred Date:</strong> ${inquiryData.eventDate || 'Not specified'}</li>
       </ul>
       
+      ${(inquiryData.cuisinePreferences || inquiryData.dietaryNeeds || inquiryData.requiredCourses || inquiryData.specificDishRequests) ? `
+      <h3>Custom Menu Details:</h3>
+      <ul>
+        ${inquiryData.cuisinePreferences ? `<li><strong>Cuisine Preferences:</strong> ${inquiryData.cuisinePreferences}</li>` : ''}
+        ${inquiryData.dietaryNeeds ? `<li><strong>Dietary Needs:</strong> ${inquiryData.dietaryNeeds}</li>` : ''}
+        ${inquiryData.requiredCourses ? `<li><strong>Required Courses:</strong> ${inquiryData.requiredCourses}</li>` : ''}
+        ${inquiryData.specificDishRequests ? `<li><strong>Specific Dish Requests:</strong> ${inquiryData.specificDishRequests}</li>` : ''}
+      </ul>
+      ` : ''}
+      
       ${inquiryData.customMessage ? `
       <h3>Additional Requirements:</h3>
       <p>${inquiryData.customMessage}</p>
       ` : ''}
       
       <hr>
-      <p><em>This inquiry was submitted through the Nourish India website contact form.</em></p>
+      <p><em>This inquiry was submitted through the Nourish India website Event & Menu Planner.</em></p>
     `;
 
     // Send email notification to business owner

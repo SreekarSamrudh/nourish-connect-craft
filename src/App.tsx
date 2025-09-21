@@ -7,6 +7,9 @@ import Navigation from "./components/Navigation";
 import Footer from "./components/Footer";
 import Index from "./pages/Index";
 import Services from "./pages/Services";
+import CorporateServices from "./pages/CorporateServices";
+import UniversityServices from "./pages/UniversityServices";
+import LiveEvents from "./pages/LiveEvents";
 import Menus from "./pages/Menus";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
@@ -28,6 +31,9 @@ const App = () => (
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/services" element={<Services />} />
+              <Route path="/services/corporate" element={<CorporateServices />} />
+              <Route path="/services/universities" element={<UniversityServices />} />
+              <Route path="/services/live-events" element={<LiveEvents />} />
               <Route path="/menus" element={<Menus />} />
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />

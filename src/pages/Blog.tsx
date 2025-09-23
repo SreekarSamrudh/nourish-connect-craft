@@ -1,5 +1,6 @@
 import { Calendar, User, Clock, ArrowRight } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
@@ -15,10 +16,12 @@ type BlogPost = {
 };
 
 const Blog = () => {
+  const navigate = useNavigate();
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [isSubscribing, setIsSubscribing] = useState(false);
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState('All Posts');
   const { toast } = useToast();
 
   useEffect(() => {
@@ -50,20 +53,10 @@ const handleNewsletterSubmit = async (e: React.FormEvent) => {
       throw new Error('Please enter a valid email address');
     }
 
-    // ADD THIS BLOCK: First, save the email to the database
-    const { error: dbError } = await supabase
-      .from('newsletter_subscriptions')
-      .insert({ email: newsletterEmail });
-
-    if (dbError) {
-      // Handle cases where the email might already exist
-      if (dbError.code === '23505') { // Unique constraint violation
-        throw new Error('This email is already subscribed.');
-      }
-      throw new Error(`Database error: ${dbError.message}`);
-    }
+    // Send newsletter subscription notification
+    console.log('Newsletter subscription for:', newsletterEmail);
     
-    // Then, send the notification email
+    // Send the notification email
     const { error: emailError } = await supabase.functions.invoke('send-newsletter-email', {
       body: { email: newsletterEmail }
     });
@@ -90,9 +83,27 @@ const handleNewsletterSubmit = async (e: React.FormEvent) => {
     setIsSubscribing(false);
   }
 };
+
   // Extract featured and regular posts from database
   const featuredPost = blogPosts.find(post => post.is_featured) || (blogPosts.length > 0 ? blogPosts[0] : null);
-  const regularPosts = blogPosts.filter(post => !post.is_featured || post.id !== featuredPost?.id);
+  const allRegularPosts = blogPosts.filter(post => !post.is_featured && post.id !== featuredPost?.id);
+  
+  // Filter regular posts based on selected category
+  const regularPosts = selectedCategory === 'All Posts' 
+    ? allRegularPosts 
+    : allRegularPosts.filter(post => {
+        // Map category names to database values
+        const categoryMap: { [key: string]: string } = {
+          'Corporate Catering': 'corporate',
+          'Wedding Catering': 'wedding',
+          'Culinary Tips': 'tips',
+          'Vegan Options': 'vegan',
+          'Event Planning': 'events',
+          'Behind the Scenes': 'behind-scenes'
+        };
+        const dbCategory = categoryMap[selectedCategory];
+        return post.content?.toLowerCase().includes(dbCategory) || false;
+      });
 
   const categories = [
     "All Posts",
@@ -170,7 +181,10 @@ const handleNewsletterSubmit = async (e: React.FormEvent) => {
                     </div>
                   </div>
                   
-                  <button className="btn-primary w-fit flex items-center space-x-2">
+                  <button 
+                    onClick={() => navigate(`/blog/${featuredPost.id}`)}
+                    className="btn-primary w-fit flex items-center space-x-2"
+                  >
                     <span>Read Article</span>
                     <ArrowRight className="h-4 w-4" />
                   </button>
@@ -198,7 +212,12 @@ const handleNewsletterSubmit = async (e: React.FormEvent) => {
             {categories.map((category) => (
               <button
                 key={category}
-                className="px-6 py-2 rounded-lg border border-border text-foreground hover:bg-primary hover:text-primary-foreground transition-all duration-300"
+                onClick={() => setSelectedCategory(category)}
+                className={`px-6 py-2 rounded-lg border transition-all duration-300 ${
+                  selectedCategory === category
+                    ? 'bg-primary text-primary-foreground border-primary'
+                    : 'border-border text-foreground hover:bg-primary hover:text-primary-foreground'
+                }`}
               >
                 {category}
               </button>
@@ -249,7 +268,10 @@ const handleNewsletterSubmit = async (e: React.FormEvent) => {
                       <span className="text-xs text-muted-foreground">
                         {post.published_at ? new Date(post.published_at).toLocaleDateString() : 'Recently'}
                       </span>
-                      <button className="text-primary hover:text-primary/80 font-medium text-sm flex items-center space-x-1">
+                      <button 
+                        onClick={() => navigate(`/blog/${post.id}`)}
+                        className="text-primary hover:text-primary/80 font-medium text-sm flex items-center space-x-1"
+                      >
                         <span>Read More</span>
                         <ArrowRight className="h-3 w-3" />
                       </button>

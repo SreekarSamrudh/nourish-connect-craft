@@ -1,43 +1,45 @@
 import { Calendar, User, Clock, ArrowRight } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom'; // Import Link
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
+// Define a type for our blog post data
 type BlogPost = {
   id: number;
   title: string;
   content: string | null;
   image_url: string | null;
-  status: string | null;
   published_at: string | null;
-  author_id: string | null;
-  is_featured?: boolean | null;
-  category?: string | null;
+  is_featured: boolean | null;
+  category: string | null;
+  // These fields were in your original static data, so we'll keep them for structure
+  author: string; 
+  readTime: string;
 };
 
 const Blog = () => {
-  const navigate = useNavigate();
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [isSubscribing, setIsSubscribing] = useState(false);
-  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [selectedCategory, setSelectedCategory] = useState('All Posts');
   const { toast } = useToast();
+  
+  const [allPosts, setAllPosts] = useState<BlogPost[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [activeCategory, setActiveCategory] = useState('All Posts');
 
+  // Fetch blog posts from Supabase when the page loads
   useEffect(() => {
     const fetchBlogPosts = async () => {
       setLoading(true);
       const { data, error } = await supabase
         .from('blog_posts')
         .select('*')
-        .eq('status', 'published')
         .order('published_at', { ascending: false });
 
       if (error) {
         console.error('Error fetching blog posts:', error);
-      } else {
-        setBlogPosts(data || []);
+      } else if (data) {
+        setAllPosts(data as BlogPost[]);
       }
       setLoading(false);
     };
@@ -45,66 +47,66 @@ const Blog = () => {
     fetchBlogPosts();
   }, []);
 
-const handleNewsletterSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  setIsSubscribing(true);
+  const handleNewsletterSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubscribing(true);
 
-  try {
-    if (!newsletterEmail || !newsletterEmail.includes('@')) {
-      throw new Error('Please enter a valid email address');
-    }
+    try {
+      if (!newsletterEmail || !newsletterEmail.includes('@')) {
+        throw new Error('Please enter a valid email address');
+      }
 
-    // Send newsletter subscription notification
-    console.log('Newsletter subscription for:', newsletterEmail);
-    
-    // Send the notification email
-    const { error: emailError } = await supabase.functions.invoke('send-newsletter-email', {
-      body: { email: newsletterEmail }
-    });
+      // 1. Save email to the database
+      const { error: dbError } = await supabase
+        .from('newsletter_subscriptions')
+        .insert({ email: newsletterEmail });
 
-    if (emailError) {
-      // This is not a critical error, so we just log it
-      console.warn('Email sending failed:', emailError);
-    }
+      if (dbError) {
+        if (dbError.code === '23505') {
+          throw new Error('This email is already subscribed.');
+        }
+        throw new Error(`Database error: ${dbError.message}`);
+      }
 
-    toast({
-      title: "Subscription Successful!",
-      description: "Thank you for subscribing to our newsletter.",
-    });
-
-    setNewsletterEmail('');
-  } catch (error: any) {
-    console.error('Newsletter subscription error:', error);
-    toast({
-      title: "Subscription Failed",
-      description: error.message || "There was an error subscribing. Please try again.",
-      variant: "destructive",
-    });
-  } finally {
-    setIsSubscribing(false);
-  }
-};
-
-  // Extract featured and regular posts from database
-  const featuredPost = blogPosts.find(post => post.is_featured);
-  const allRegularPosts = blogPosts.filter(post => !post.is_featured);
-  
-  // Filter regular posts based on selected category
-  const regularPosts = selectedCategory === 'All Posts' 
-    ? allRegularPosts 
-    : allRegularPosts.filter(post => {
-        // Filter by category column in database
-        return post.category === selectedCategory.toLowerCase().replace(' ', '_');
+      // 2. Send notification email
+      const { error: emailError } = await supabase.functions.invoke('send-newsletter-email', {
+        body: { email: newsletterEmail }
       });
 
+      if (emailError) {
+        console.warn('Email sending failed:', emailError);
+      }
+
+      toast({
+        title: "Subscription Successful!",
+        description: "Thank you for subscribing.",
+      });
+
+      setNewsletterEmail('');
+    } catch (error: any) {
+      console.error('Newsletter subscription error:', error);
+      toast({
+        title: "Subscription Failed",
+        description: error.message || "There was an error subscribing.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubscribing(false);
+    }
+  };
+  
+  // Correctly separate the featured post from the regular posts
+  const featuredPost = allPosts.find(post => post.is_featured);
+  const regularPosts = allPosts.filter(post => !post.is_featured);
+
+  // Correctly filter the regular posts based on the active category
+  const filteredPosts = activeCategory === 'All Posts' 
+    ? regularPosts 
+    : regularPosts.filter(post => post.category === activeCategory);
+
   const categories = [
-    "All Posts",
-    "corporate_catering",
-    "wedding_catering", 
-    "culinary_tips",
-    "vegan_options",
-    "event_planning",
-    "behind_scenes"
+    "All Posts", "Corporate Catering", "Wedding Catering", "Culinary Tips",
+    "Vegan Options", "Event Planning", "Behind the Scenes"
   ];
 
   return (
@@ -132,7 +134,7 @@ const handleNewsletterSubmit = async (e: React.FormEvent) => {
               </h2>
             </div>
             
-            <div className="card-premium overflow-hidden group hover:scale-105 transition-all duration-300">
+            <Link to={`/blog/${featuredPost.id}`} className="card-premium overflow-hidden group hover:scale-105 transition-all duration-300 block">
               <div className="grid lg:grid-cols-2 gap-0">
                 <div className="relative">
                   <img 
@@ -148,6 +150,10 @@ const handleNewsletterSubmit = async (e: React.FormEvent) => {
                 </div>
                 
                 <div className="p-8 lg:p-12 flex flex-col justify-center">
+                  <div className="mb-4">
+                    <span className="text-primary font-medium">{featuredPost.category}</span>
+                  </div>
+                  
                   <h3 className="font-playfair text-2xl lg:text-3xl font-bold text-foreground mb-4">
                     {featuredPost.title}
                   </h3>
@@ -164,7 +170,7 @@ const handleNewsletterSubmit = async (e: React.FormEvent) => {
                       </div>
                       <div className="flex items-center space-x-1">
                         <Calendar className="h-4 w-4" />
-                        <span>{featuredPost.published_at ? new Date(featuredPost.published_at).toLocaleDateString() : 'Recently'}</span>
+                        <span>{new Date(featuredPost.published_at || Date.now()).toLocaleDateString()}</span>
                       </div>
                       <div className="flex items-center space-x-1">
                         <Clock className="h-4 w-4" />
@@ -173,16 +179,13 @@ const handleNewsletterSubmit = async (e: React.FormEvent) => {
                     </div>
                   </div>
                   
-                  <button 
-                    onClick={() => navigate(`/blog/${featuredPost.id}`)}
-                    className="btn-primary w-fit flex items-center space-x-2"
-                  >
+                  <div className="text-primary font-medium flex items-center">
                     <span>Read Article</span>
-                    <ArrowRight className="h-4 w-4" />
-                  </button>
+                    <ArrowRight className="h-4 w-4 ml-2" />
+                  </div>
                 </div>
               </div>
-            </div>
+            </Link>
           </div>
         </section>
       )}
@@ -204,18 +207,10 @@ const handleNewsletterSubmit = async (e: React.FormEvent) => {
             {categories.map((category) => (
               <button
                 key={category}
-                onClick={() => setSelectedCategory(category)}
-                className={`px-6 py-2 rounded-lg border transition-all duration-300 ${
-                  selectedCategory === category
-                    ? 'bg-primary text-primary-foreground border-primary'
-                    : 'border-border text-foreground hover:bg-primary hover:text-primary-foreground'
-                }`}
+                onClick={() => setActiveCategory(category)}
+                className={`px-6 py-2 rounded-lg border transition-all duration-300 ${activeCategory === category ? 'bg-primary text-primary-foreground' : 'border-border text-foreground hover:bg-muted'}`}
               >
-                {category === 'All Posts' ? category : 
-                 category.split('_').map(word => 
-                   word.charAt(0).toUpperCase() + word.slice(1)
-                 ).join(' ')
-                }
+                {category}
               </button>
             ))}
           </div>
@@ -225,8 +220,8 @@ const handleNewsletterSubmit = async (e: React.FormEvent) => {
             <div className="text-center py-12">Loading blog posts...</div>
           ) : (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {regularPosts.length > 0 ? regularPosts.map((post) => (
-                <article key={post.id} className="card-premium overflow-hidden group hover:scale-105 transition-all duration-300">
+              {filteredPosts.length > 0 ? filteredPosts.map((post) => (
+                <Link to={`/blog/${post.id}`} key={post.id} className="card-premium block overflow-hidden group hover:scale-105 transition-all duration-300">
                   <div className="relative">
                     <img 
                       src={post.image_url || "/api/placeholder/400/250"} 
@@ -235,7 +230,7 @@ const handleNewsletterSubmit = async (e: React.FormEvent) => {
                     />
                     <div className="absolute top-4 left-4">
                       <span className="bg-white/90 backdrop-blur-sm text-foreground px-2 py-1 rounded text-xs font-medium">
-                        Blog
+                        {post.category}
                       </span>
                     </div>
                   </div>
@@ -262,21 +257,18 @@ const handleNewsletterSubmit = async (e: React.FormEvent) => {
                     
                     <div className="flex items-center justify-between">
                       <span className="text-xs text-muted-foreground">
-                        {post.published_at ? new Date(post.published_at).toLocaleDateString() : 'Recently'}
+                        {new Date(post.published_at || Date.now()).toLocaleDateString()}
                       </span>
-                      <button 
-                        onClick={() => navigate(`/blog/${post.id}`)}
-                        className="text-primary hover:text-primary/80 font-medium text-sm flex items-center space-x-1"
-                      >
+                      <div className="text-primary hover:text-primary/80 font-medium text-sm flex items-center space-x-1">
                         <span>Read More</span>
                         <ArrowRight className="h-3 w-3" />
-                      </button>
+                      </div>
                     </div>
                   </div>
-                </article>
+                </Link>
               )) : (
                 <div className="col-span-full text-center py-12">
-                  <p className="text-muted-foreground">No blog posts available at the moment.</p>
+                  <p className="text-muted-foreground">No blog posts found for this category.</p>
                 </div>
               )}
             </div>

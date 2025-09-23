@@ -13,6 +13,7 @@ type BlogPost = {
   published_at: string | null;
   author_id: string | null;
   is_featured?: boolean | null;
+  category?: string | null;
 };
 
 const Blog = () => {
@@ -85,34 +86,25 @@ const handleNewsletterSubmit = async (e: React.FormEvent) => {
 };
 
   // Extract featured and regular posts from database
-  const featuredPost = blogPosts.find(post => post.is_featured) || (blogPosts.length > 0 ? blogPosts[0] : null);
-  const allRegularPosts = blogPosts.filter(post => !post.is_featured && post.id !== featuredPost?.id);
+  const featuredPost = blogPosts.find(post => post.is_featured);
+  const allRegularPosts = blogPosts.filter(post => !post.is_featured);
   
   // Filter regular posts based on selected category
   const regularPosts = selectedCategory === 'All Posts' 
     ? allRegularPosts 
     : allRegularPosts.filter(post => {
-        // Map category names to database values
-        const categoryMap: { [key: string]: string } = {
-          'Corporate Catering': 'corporate',
-          'Wedding Catering': 'wedding',
-          'Culinary Tips': 'tips',
-          'Vegan Options': 'vegan',
-          'Event Planning': 'events',
-          'Behind the Scenes': 'behind-scenes'
-        };
-        const dbCategory = categoryMap[selectedCategory];
-        return post.content?.toLowerCase().includes(dbCategory) || false;
+        // Filter by category column in database
+        return post.category === selectedCategory.toLowerCase().replace(' ', '_');
       });
 
   const categories = [
     "All Posts",
-    "Corporate Catering",
-    "Wedding Catering", 
-    "Culinary Tips",
-    "Vegan Options",
-    "Event Planning",
-    "Behind the Scenes"
+    "corporate_catering",
+    "wedding_catering", 
+    "culinary_tips",
+    "vegan_options",
+    "event_planning",
+    "behind_scenes"
   ];
 
   return (
@@ -219,7 +211,11 @@ const handleNewsletterSubmit = async (e: React.FormEvent) => {
                     : 'border-border text-foreground hover:bg-primary hover:text-primary-foreground'
                 }`}
               >
-                {category}
+                {category === 'All Posts' ? category : 
+                 category.split('_').map(word => 
+                   word.charAt(0).toUpperCase() + word.slice(1)
+                 ).join(' ')
+                }
               </button>
             ))}
           </div>

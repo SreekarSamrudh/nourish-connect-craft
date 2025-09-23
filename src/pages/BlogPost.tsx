@@ -13,6 +13,7 @@ type BlogPost = {
   published_at: string | null;
   author_id: string | null;
   is_featured?: boolean | null;
+  category?: string | null;
 };
 
 const BlogPost = () => {

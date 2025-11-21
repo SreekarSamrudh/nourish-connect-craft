@@ -24,7 +24,7 @@ const Navigation = () => {
             <div className="flex items-center space-x-6">
               <div className="flex items-center space-x-2">
                 <Phone className="h-4 w-4" />
-                <span>+91 9980066824</span>
+                <span>+91 6364432179</span>
               </div>
               <div className="flex items-center space-x-2">
                 <Mail className="h-4 w-4" />

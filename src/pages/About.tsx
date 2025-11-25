@@ -159,7 +159,7 @@ const About = () => {
           <div className="flex justify-center">
             <div className="card-premium p-6 text-center max-w-sm">
               <img 
-                src="/assets/director.jpg" 
+                src="/api/placeholder/200/200" 
                 alt="Director Portrait"
                 className="w-32 h-32 rounded-full mx-auto mb-4 object-cover"
               />

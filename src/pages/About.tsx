@@ -75,12 +75,11 @@ const About = () => {
             </div>
             <div className="relative">
               <img 
-                src="/assets/ourteam.jpg"  
-                alt="Our Team"
+                src="/api/placeholder/600/500" 
+                alt="Our kitchen and team"
                 className="rounded-lg shadow-lg w-full h-96 object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-lg"></div>
-            </div>
             </div>
           </div>
         </div>

@@ -108,7 +108,7 @@ const Contact = () => {
     {
       icon: MapPin,
       title: "Service Areas",
-      details: "# 49-9, 4th Main, 5th Cross, Chikka Begur Gate, Skoda Service Center, Kudlu Gate, Begur, BENGALURU - 560068",
+      details: " # 40/2, A T Street,Ward No.175, Opp Ganesha Temple,Bommanahalli, BENGALURU - 560068",
       description: "We cater events across India"
     },
     {

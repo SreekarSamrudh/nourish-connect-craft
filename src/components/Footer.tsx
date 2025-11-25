@@ -114,7 +114,7 @@ const Footer = () => {
               <div className="flex items-start space-x-3">
                 <MapPin className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
                 <div>
-                  <p className="text-background/80"># 49-9, 4th Main, 5th Cross, Chikka Begur Gate, Skoda Service Center, Kudlu Gate, Begur, BENGALURU - 560068.</p>
+                  <p className="text-background/80"> # 40/2, A T Street,Ward No.175, Opp Ganesha Temple,Bommanahalli, BENGALURU - 560068</p>
                 </div>
               </div>
               <div className="flex items-start space-x-3">

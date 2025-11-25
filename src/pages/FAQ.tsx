@@ -221,7 +221,7 @@ const FAQ = () => {
               </div>
               <div className="text-left">
                 <p className="font-medium">Call Us</p>
-                <p className="opacity-90">+91 9980066824</p>
+                <p className="opacity-90">+91 6364432179</p>
               </div>
             </div>
             
@@ -231,7 +231,7 @@ const FAQ = () => {
               </div>
               <div className="text-left">
                 <p className="font-medium">Email Us</p>
-                <p className="opacity-90">nourishindiainfo@gmail.com</p>
+                <p className="opacity-90">info@nourishindia.co.in</p>
               </div>
             </div>
           </div>

@@ -28,7 +28,7 @@ const Navigation = () => {
               </div>
               <div className="flex items-center space-x-2">
                 <Mail className="h-4 w-4" />
-                <span>nourishindiainfo@gmail.com</span>
+                <span>info@nourishindia.co.in</span>
               </div>
             </div>
             <div className="hidden md:block">

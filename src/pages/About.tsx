@@ -152,52 +152,26 @@ const About = () => {
             Meet Our Team
           </h2>
           <p className="text-xl text-muted-foreground mb-12 max-w-3xl mx-auto">
-            Our passionate team of culinary experts and service professionals work together 
-            to create exceptional experiences for every event.
+            Our passionate leadership inspires excellence and ensures exceptional experiences for every event.
           </p>
-          
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="card-premium p-6 text-center">
+      
+          <div className="flex justify-center">
+            <div className="card-premium p-6 text-center max-w-sm">
               <img 
                 src="/api/placeholder/200/200" 
-                alt="Chef Portrait"
+                alt="Director Portrait"
                 className="w-32 h-32 rounded-full mx-auto mb-4 object-cover"
               />
-              <h3 className="font-playfair text-xl font-semibold mb-2">Chef Rajesh Kumar</h3>
-              <p className="text-primary font-medium mb-2">Executive Chef</p>
+              <h3 className="font-playfair text-xl font-semibold mb-2">J Rekha</h3>
+              <p className="text-primary font-medium mb-2">Director</p>
               <p className="text-muted-foreground text-sm">
-                20+ years of culinary expertise specializing in traditional and contemporary Indian cuisine.
-              </p>
-            </div>
-            
-            <div className="card-premium p-6 text-center">
-              <img 
-                src="/api/placeholder/200/200" 
-                alt="Manager Portrait"
-                className="w-32 h-32 rounded-full mx-auto mb-4 object-cover"
-              />
-              <h3 className="font-playfair text-xl font-semibold mb-2">Priya Sharma</h3>
-              <p className="text-primary font-medium mb-2">Operations Manager</p>
-              <p className="text-muted-foreground text-sm">
-                Ensures seamless event coordination and exceptional client service for every occasion.
-              </p>
-            </div>
-            
-            <div className="card-premium p-6 text-center">
-              <img 
-                src="/api/placeholder/200/200" 
-                alt="Sous Chef Portrait"
-                className="w-32 h-32 rounded-full mx-auto mb-4 object-cover"
-              />
-              <h3 className="font-playfair text-xl font-semibold mb-2">Chef Meera Patel</h3>
-              <p className="text-primary font-medium mb-2">Sous Chef</p>
-              <p className="text-muted-foreground text-sm">
-                Specializes in vegan and health-conscious menu development with creative flair.
+                Leading with vision and dedication to deliver unmatched culinary and service excellence.
               </p>
             </div>
           </div>
         </div>
       </section>
+
 
       {/* CTA Section */}
       <section className="section-padding bg-card">

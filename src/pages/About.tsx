@@ -75,7 +75,7 @@ const About = () => {
             </div>
             <div className="relative">
               <img 
-                src="/assets/ourteam.jpg" 
+                src="/src/assets/ourteam.jpg" 
                 alt="Our kitchen and team"
                 className="rounded-lg shadow-lg w-full h-96 object-cover"
               />
@@ -158,7 +158,7 @@ const About = () => {
           <div className="flex justify-center">
             <div className="card-premium p-6 text-center max-w-sm">
               <img 
-                src="/assets/director.jpg" 
+                src="/src/assets/director.jpg" 
                 alt="Director"
                 className="w-32 h-32 rounded-full mx-auto mb-4 object-cover"
               />

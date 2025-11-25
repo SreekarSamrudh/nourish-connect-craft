@@ -133,7 +133,7 @@ const Footer = () => {
         <div className="border-t border-background/20 py-6">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <p className="text-background/60 text-sm">
-              © 2024 NOURISH INDIA PVT LTD. All rights reserved. Crafted with passion for culinary excellence.
+              © 2025 NOURISH INDIA PVT LTD. All rights reserved. Crafted with passion for culinary excellence.
             </p>
             <div className="flex space-x-6 text-sm">
               <Link to="/privacy" className="text-background/60 hover:text-primary transition-colors">

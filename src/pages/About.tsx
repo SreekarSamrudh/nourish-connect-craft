@@ -1,5 +1,8 @@
 import { Users, Award, Heart, Leaf } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import OurTeam from "../assets/ourteam.jpg";
+import Director from "../assets/director.jpg";
+
 
 const About = () => {
   const values = [
@@ -75,7 +78,7 @@ const About = () => {
             </div>
             <div className="relative">
               <img 
-                src="/src/assets/ourteam.jpg" 
+                src={OurTeam}
                 alt="Our kitchen and team"
                 className="rounded-lg shadow-lg w-full h-96 object-cover"
               />
@@ -158,7 +161,7 @@ const About = () => {
           <div className="flex justify-center">
             <div className="card-premium p-6 text-center max-w-sm">
               <img 
-                src="/src/assets/director.jpg" 
+                src={Director} 
                 alt="Director"
                 className="w-32 h-32 rounded-full mx-auto mb-4 object-cover"
               />

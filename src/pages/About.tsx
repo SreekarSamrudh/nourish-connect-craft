@@ -75,11 +75,12 @@ const About = () => {
             </div>
             <div className="relative">
               <img 
-                src="/api/placeholder/600/500" 
-                alt="Our kitchen and team"
+                src="/assets/ourteam.jpg"  
+                alt="Our Team"
                 className="rounded-lg shadow-lg w-full h-96 object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-lg"></div>
+            </div>
             </div>
           </div>
         </div>
@@ -158,7 +159,7 @@ const About = () => {
           <div className="flex justify-center">
             <div className="card-premium p-6 text-center max-w-sm">
               <img 
-                src="/api/placeholder/200/200" 
+                src="/assets/director.jpg" 
                 alt="Director Portrait"
                 className="w-32 h-32 rounded-full mx-auto mb-4 object-cover"
               />

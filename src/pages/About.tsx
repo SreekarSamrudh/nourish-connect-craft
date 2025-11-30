@@ -147,7 +147,34 @@ const About = () => {
           </div>
         </div>
       </section>
-
+      
+      {/* NEW SECTION: Trusted By Industry Leaders */}
+      <section className="section-padding bg-white">
+        <div className="container-custom">
+            <div className="text-center mb-12">
+                <h2 className="font-playfair text-3xl md:text-4xl font-bold text-foreground mb-4">
+                    Trusted By Industry Leaders
+                </h2>
+                <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+                    We are proud to serve some of the world's most innovative companies.
+                </p>
+            </div>
+            
+            {/* Logo Grid */}
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center justify-items-center">
+                {clients.map((client, index) => (
+                    <div key={index} className="w-full h-24 flex items-center justify-center grayscale hover:grayscale-0 transition-all duration-300 p-4">
+                        <img 
+                            src={client.logo} 
+                            alt={`${client.name} logo`} 
+                            className="max-h-16 w-auto object-contain"
+                        />
+                    </div>
+                ))}
+            </div>
+        </div>
+      </section>
+      
       {/* Team Section */}
       <section className="section-padding bg-background">
         <div className="container-custom text-center">

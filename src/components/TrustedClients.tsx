@@ -1,7 +1,6 @@
 import { Users, Award, Heart, Leaf } from 'lucide-react';
 
 // IMPORTING CLIENT LOGOS from src/assets
-// Ensure these filenames match exactly what is in your folder
 import HPLogo from "../assets/hp.png"; 
 import LGLogo from "../assets/lg.png";
 import SchneiderLogo from "../assets/schneider.png";
@@ -10,7 +9,6 @@ import ZSLogo from "../assets/zs.png";
 import DevRevLogo from "../assets/devrev.png";
 
 const TrustedClients = () => {
-  // Using the imported images
   const clients = [
     { name: "HP", logo: HPLogo },
     { name: "LG", logo: LGLogo },
@@ -43,7 +41,8 @@ const TrustedClients = () => {
               <img 
                 src={client.logo} 
                 alt={`${client.name} logo`} 
-                className="max-h-12 max-w-full object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300 opacity-70 group-hover:opacity-100"
+                // UPDATED CLASS: Removed opacity-70 to match the About page style
+                className="max-h-12 max-w-full object-contain grayscale group-hover:grayscale-0 transition-all duration-300"
               />
             </div>
           ))}

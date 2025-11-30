@@ -3,6 +3,14 @@ import { Link } from 'react-router-dom';
 import OurTeam from "../assets/ourteam.jpg";
 import Director from "../assets/director.jpg";
 
+// IMPORTING CLIENT LOGOS
+// Make sure these image files exist in your assets folder, or update the names to match yours
+import HPLogo from "../assets/hp.png"; 
+import LGLogo from "../assets/lg.png";
+import SchneiderLogo from "../assets/schneider.png";
+import DocuSignLogo from "../assets/docusign.png";
+import ZSLogo from "../assets/zs.png";
+import DevRevLogo from "../assets/devrev.png";
 
 const About = () => {
   const values = [
@@ -33,6 +41,15 @@ const About = () => {
     { number: "3+", label: "Years Experience" },
     { number: "50+", label: "Signature Dishes" },
     { number: "99%", label: "Client Satisfaction" }
+  ];
+
+  const clients = [
+    { name: "HP", logo: HPLogo },
+    { name: "LG", logo: LGLogo },
+    { name: "Schneider Electric", logo: SchneiderLogo },
+    { name: "DocuSign", logo: DocuSignLogo },
+    { name: "ZS", logo: ZSLogo },
+    { name: "DevRev", logo: DevRevLogo },
   ];
 
   return (
@@ -132,7 +149,7 @@ const About = () => {
               Numbers that reflect our commitment to excellence
             </p>
           </div>
-          
+           
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
             {stats.map((stat, index) => (
               <div key={index} className="text-center">
@@ -147,7 +164,7 @@ const About = () => {
           </div>
         </div>
       </section>
-      
+
       {/* NEW SECTION: Trusted By Industry Leaders */}
       <section className="section-padding bg-white">
         <div className="container-custom">
@@ -174,7 +191,7 @@ const About = () => {
             </div>
         </div>
       </section>
-      
+
       {/* Team Section */}
       <section className="section-padding bg-background">
         <div className="container-custom text-center">
@@ -184,7 +201,7 @@ const About = () => {
           <p className="text-xl text-muted-foreground mb-12 max-w-3xl mx-auto">
             Our passionate leadership inspires excellence and ensures exceptional experiences for every event.
           </p>
-      
+           
           <div className="flex justify-center">
             <div className="card-premium p-6 text-center max-w-sm">
               <img 
@@ -201,7 +218,6 @@ const About = () => {
           </div>
         </div>
       </section>
-
 
       {/* CTA Section */}
       <section className="section-padding bg-card">

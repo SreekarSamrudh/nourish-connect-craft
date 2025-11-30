@@ -9,7 +9,6 @@ const Navigation = () => {
   const navItems = [
     { name: 'Home', path: '/' },
     { name: 'Services', path: '/services' },
-    { name: 'Menus', path: '/menus' },
     { name: 'About', path: '/about' },
     { name: 'Blog', path: '/blog' },
     { name: 'FAQ', path: '/faq' },
@@ -43,7 +42,6 @@ const Navigation = () => {
         <div className="flex justify-between items-center py-4">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-3">
-            {/* Use the imported logo here */}
             <img src={logo} alt="Nourish India Logo" className="w-12 h-12 object-contain" />
             <div>
               <h1 className="font-playfair font-bold text-2xl text-foreground">Nourish India</h1>

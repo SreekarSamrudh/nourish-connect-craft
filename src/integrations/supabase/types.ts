@@ -17,27 +17,33 @@ export type Database = {
       blog_posts: {
         Row: {
           author_id: string | null
+          category: string | null
           content: string | null
           id: number
           image_url: string | null
+          is_featured: boolean | null
           published_at: string | null
           status: string | null
           title: string
         }
         Insert: {
           author_id?: string | null
+          category?: string | null
           content?: string | null
           id?: number
           image_url?: string | null
+          is_featured?: boolean | null
           published_at?: string | null
           status?: string | null
           title: string
         }
         Update: {
           author_id?: string | null
+          category?: string | null
           content?: string | null
           id?: number
           image_url?: string | null
+          is_featured?: boolean | null
           published_at?: string | null
           status?: string | null
           title?: string
@@ -162,41 +168,54 @@ export type Database = {
       }
       menu_items: {
         Row: {
-          category_id: number | null
+          category: string | null
+          created_at: string
           description: string | null
           id: number
           image_url: string | null
-          is_popular: boolean | null
+          is_featured: boolean | null
           name: string
-          price: number | null
+          price: string | null
         }
         Insert: {
-          category_id?: number | null
+          category?: string | null
+          created_at?: string
           description?: string | null
-          id?: number
+          id?: never
           image_url?: string | null
-          is_popular?: boolean | null
+          is_featured?: boolean | null
           name: string
-          price?: number | null
+          price?: string | null
         }
         Update: {
-          category_id?: number | null
+          category?: string | null
+          created_at?: string
           description?: string | null
-          id?: number
+          id?: never
           image_url?: string | null
-          is_popular?: boolean | null
+          is_featured?: boolean | null
           name?: string
-          price?: number | null
+          price?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "menu_items_category_id_fkey"
-            columns: ["category_id"]
-            isOneToOne: false
-            referencedRelation: "menu_categories"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
+      }
+      newsletter_subscriptions: {
+        Row: {
+          created_at: string
+          email: string
+          id: number
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: never
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: never
+        }
+        Relationships: []
       }
       portfolio_items: {
         Row: {

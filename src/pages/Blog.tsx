@@ -1,10 +1,10 @@
 import { Calendar, User, Clock, ArrowRight } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom'; // Import Link
+import { Link } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
-// Define a type for our blog post data
+// Define a type that matches the database schema
 type BlogPost = {
   id: number;
   title: string;
@@ -13,9 +13,8 @@ type BlogPost = {
   published_at: string | null;
   is_featured: boolean | null;
   category: string | null;
-  // These fields were in your original static data, so we'll keep them for structure
-  author: string; 
-  readTime: string;
+  author_id: string | null;
+  status: string | null;
 };
 
 const Blog = () => {
@@ -56,10 +55,10 @@ const Blog = () => {
         throw new Error('Please enter a valid email address');
       }
 
-      // 1. Save email to the database
+      // Save email to the database using raw query approach
       const { error: dbError } = await supabase
         .from('newsletter_subscriptions')
-        .insert({ email: newsletterEmail });
+        .insert([{ email: newsletterEmail }]);
 
       if (dbError) {
         if (dbError.code === '23505') {
@@ -68,7 +67,7 @@ const Blog = () => {
         throw new Error(`Database error: ${dbError.message}`);
       }
 
-      // 2. Send notification email
+      // Send notification email
       const { error: emailError } = await supabase.functions.invoke('send-newsletter-email', {
         body: { email: newsletterEmail }
       });

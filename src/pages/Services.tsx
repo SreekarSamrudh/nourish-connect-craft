@@ -166,10 +166,10 @@ const Services = () => {
               Request a Quote
             </Link>
             <Link 
-              to="/menus"
+              to="/contact"
               className="px-10 py-4 border-2 border-white text-white hover:bg-white hover:text-foreground rounded-lg font-medium transition-all duration-300 text-center"
             >
-              View Our Menus
+              Request Custom Menu
             </Link>
           </div>
         </div>

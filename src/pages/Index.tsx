@@ -1,6 +1,7 @@
 import HeroCarousel from '@/components/HeroCarousel';
 import ServiceHighlights from '@/components/ServiceHighlights';
-import PopularDishes from '@/components/PopularDishes';
+import CulinaryExcellence from '@/components/CulinaryExcellence';
+import TrustedClients from '@/components/TrustedClients';
 import { Link } from 'react-router-dom';
 
 const Index = () => {
@@ -23,7 +24,8 @@ const Index = () => {
       </section>
 
       <ServiceHighlights />
-      <PopularDishes />
+      <CulinaryExcellence />
+      <TrustedClients />
       
       {/* CTA Banner */}
       <section className="section-padding bg-gradient-to-r from-primary to-secondary text-white">
@@ -43,10 +45,10 @@ const Index = () => {
               Request a Quote
             </Link>
             <Link 
-              to="/menus" 
+              to="/contact" 
               className="px-10 py-4 border-2 border-white text-white hover:bg-white hover:text-foreground rounded-lg font-medium transition-all duration-300 text-center"
             >
-              View Our Menus
+              Request Custom Menu
             </Link>
           </div>
         </div>

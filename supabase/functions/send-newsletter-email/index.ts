@@ -46,7 +46,7 @@ const handler = async (req: Request): Promise<Response> => {
     // Send notification email to business owner
     const emailResponse = await resend.emails.send({
       from: "Nourish India <onboarding@resend.dev>",
-      to: ["enquiries@nourishindia.co.in"],
+      to: ["bannu2610@gmail.com"],
       subject: `New Newsletter Subscription from Nourish India Website`,
       html: `
         <h2>New Newsletter Subscription</h2>

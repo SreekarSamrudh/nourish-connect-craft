@@ -38,7 +38,7 @@ const About = () => {
 
   const stats = [
     { number: "60+", label: "Events Catered" },
-    { number: "3+", label: "Years Experience" },
+    { number: "25+", label: "Years Experience" },
     { number: "50+", label: "Signature Dishes" },
     { number: "99%", label: "Client Satisfaction" }
   ];

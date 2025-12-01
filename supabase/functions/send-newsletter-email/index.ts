@@ -68,7 +68,7 @@ const handler = async (req: Request): Promise<Response> => {
       from: "Nourish India <onboarding@resend.dev>",
       
       // IMPORTANT: Changed to your working Gmail to fix the "Bouncing" issue
-      to: ["nourishindiainfo@gmail.com"], 
+      to: ["enquiries@nourishindia.co.in"], 
       
       subject: `New Newsletter Subscription from Nourish India Website`,
       html: `

@@ -53,7 +53,7 @@ const handler = async (req: Request): Promise<Response> => {
       const contactData = await resend.contacts.create({
         email: email,
         unsubscribed: false,
-        audienceId: 'd664e32d-9486-4447-a9a3-524458514124' // Default ID or get from Resend Dashboard
+        audienceId: '956ec1f2-becb-460c-b242-bcc6ddc4cac2' // Default ID or get from Resend Dashboard
       });
       console.log("Contact added to Resend list:", contactData);
     } catch (contactError) {

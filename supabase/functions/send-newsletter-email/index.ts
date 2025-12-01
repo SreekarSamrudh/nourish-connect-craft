@@ -65,7 +65,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     // --- Send Notification Email to YOU ---
     const emailResponse = await resend.emails.send({
-      from: "Nourish India <onboarding@resend.dev>",
+      from: "Nourish India <enquiries@nourishindia.co.in>",
       
       // IMPORTANT: Changed to your working Gmail to fix the "Bouncing" issue
       to: ["enquiries@nourishindia.co.in"], 

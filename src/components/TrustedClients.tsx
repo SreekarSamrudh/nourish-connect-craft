@@ -55,8 +55,8 @@ const TrustedClients = () => {
             <div className="text-muted-foreground">Events Catered</div>
           </div>
           <div>
-            <div className="text-4xl font-bold text-primary mb-2">50+</div>
-            <div className="text-muted-foreground">Corporate Clients</div>
+            <div className="text-4xl font-bold text-primary mb-2">3+</div>
+            <div className="text-muted-foreground">Years Experience</div>
           </div>
           <div>
             <div className="text-4xl font-bold text-primary mb-2">50+</div>

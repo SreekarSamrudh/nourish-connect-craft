@@ -43,10 +43,33 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
-    // Send notification email to business owner
+    // --- NEW PART START: Add User to Resend Contact List ---
+    // This actually saves them so you can send bulk emails later.
+    // Note: You need your Audience ID from Resend Dashboard -> Audiences
+    // If you don't have one, Resend usually uses a Default one, but it's good to check.
+    try {
+      // We try to add them to the 'General' audience. 
+      // If this fails (e.g. no audience ID), the code will continue to send the notification.
+      const contactData = await resend.contacts.create({
+        email: email,
+        unsubscribed: false,
+        audienceId: 'd664e32d-9486-4447-a9a3-524458514124' // Default ID or get from Resend Dashboard
+      });
+      console.log("Contact added to Resend list:", contactData);
+    } catch (contactError) {
+      console.error("Could not add to contact list (minor error):", contactError);
+      // We don't stop the function here, we still want to notify you.
+    }
+    // --- NEW PART END ---
+
+
+    // --- Send Notification Email to YOU ---
     const emailResponse = await resend.emails.send({
       from: "Nourish India <onboarding@resend.dev>",
-      to: ["enquiries@nourishindia.co.in"],
+      
+      // IMPORTANT: Changed to your working Gmail to fix the "Bouncing" issue
+      to: ["nourishindiainfo@gmail.com"], 
+      
       subject: `New Newsletter Subscription from Nourish India Website`,
       html: `
         <h2>New Newsletter Subscription</h2>
@@ -61,8 +84,8 @@ const handler = async (req: Request): Promise<Response> => {
 
     return new Response(
       JSON.stringify({ 
-        success: true,
-        message: "Newsletter subscription successful",
+        success: true, 
+        message: "Newsletter subscription successful", 
         emailId: emailResponse.data?.id 
       }),
       {
@@ -78,7 +101,7 @@ const handler = async (req: Request): Promise<Response> => {
     console.error("Error in send-newsletter-email function:", error);
     return new Response(
       JSON.stringify({ 
-        error: "Failed to process newsletter subscription",
+        error: "Failed to process newsletter subscription", 
         details: error.message 
       }),
       {

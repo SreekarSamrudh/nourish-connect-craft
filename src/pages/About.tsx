@@ -1,16 +1,19 @@
-import { Users, Award, Heart, Leaf } from 'lucide-react';
+import { Users, Award, Heart, Leaf, CheckCircle, ChefHat } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import OurTeam from "../assets/ourteam.jpg";
 import Director from "../assets/director.jpg";
 
 // IMPORTING CLIENT LOGOS
-// Make sure these image files exist in your assets folder, or update the names to match yours
 import HPLogo from "../assets/hp.png"; 
 import LGLogo from "../assets/lg.png";
 import SchneiderLogo from "../assets/schneider.png";
 import DocuSignLogo from "../assets/docusign.png";
 import ZSLogo from "../assets/zs.png";
 import DevRevLogo from "../assets/devrev.png";
+
+// NEW IMAGE IMPORT
+// Please rename your uploaded WhatsApp image to 'partners.jpg' and put it in assets
+import PartnersImage from "../assets/partners.jpg"; 
 
 const About = () => {
   const values = [
@@ -87,9 +90,10 @@ const About = () => {
                   dish tells a story of flavor and authenticity.
                 </p>
                 <p className="text-lg">
-                  From intimate family gatherings to large corporate events, we've had the privilege 
-                  of being part of countless celebrations, always striving to exceed expectations and 
-                  create unforgettable dining experiences.
+                  At Nourish India, we help corporates and MNCs seamlessly manage their daily employee meals, 
+                  meetings, and event catering requirements through a single, accountable platform. In addition 
+                  to aggregating trusted, FSSAI-certified partner kitchens and premium caterers, we also operate 
+                  our own in-house kitchen, enabling us to ensure superior quality, hygiene, customization, and cost efficiency.
                 </p>
               </div>
             </div>
@@ -100,6 +104,95 @@ const About = () => {
                 className="rounded-lg shadow-lg w-full h-96 object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-lg"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* NEW: What Sets Us Apart */}
+      <section className="section-padding bg-card">
+        <div className="container-custom">
+          <div className="text-center mb-12">
+            <h2 className="font-playfair text-3xl md:text-4xl font-bold text-foreground mb-6">
+              What Sets Us Apart
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+              A full-service corporate food solutions company operating as both a food aggregator and an owner 
+              of our own professionally managed kitchen.
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[
+              {
+                title: "Dual Model Advantage",
+                desc: "Our own kitchen for quality control and flexibility, combined with a strong aggregator network for scalability."
+              },
+              {
+                title: "End-to-End Management",
+                desc: "Complete food management including menu planning, vendor coordination, ordering, delivery, and feedback management."
+              },
+              {
+                title: "Strict Hygiene Standards",
+                desc: "FSSAI compliance, standardized processes, and regular quality audits ensuring top-tier safety."
+              },
+              {
+                title: "Customizable Menus",
+                desc: "Tailored options to suit diverse tastes, dietary needs, and corporate budgets."
+              },
+              {
+                title: "Bulk & Recurring Expertise",
+                desc: "Ideal for daily meal programs, team meetings, leadership events, and large-scale corporate gatherings."
+              },
+              {
+                title: "Pan-India Capability",
+                desc: "Reliable support and operational capability across multiple locations nationwide."
+              }
+            ].map((item, index) => (
+              <div key={index} className="bg-background p-6 rounded-lg shadow-sm border border-border hover:shadow-md transition-shadow">
+                <CheckCircle className="h-8 w-8 text-primary mb-4" />
+                <h3 className="font-playfair text-xl font-bold mb-2">{item.title}</h3>
+                <p className="text-muted-foreground">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* NEW: In-House Kitchen Facility */}
+      <section className="section-padding bg-gradient-to-b from-background to-card">
+        <div className="container-custom">
+          <div className="flex flex-col md:flex-row items-center gap-12">
+            <div className="md:w-1/2 order-2 md:order-1">
+               {/* You can add a specific kitchen image here if available, using a placeholder for now or reuse existing */}
+               <div className="bg-primary/5 p-8 rounded-2xl border-2 border-primary/20">
+                  <ChefHat className="h-16 w-16 text-primary mb-6" />
+                  <h3 className="font-playfair text-2xl font-bold mb-4">Quality Control Center</h3>
+                  <p className="text-muted-foreground mb-4">
+                    Having our own kitchen enables us to deliver reliable, high-quality catering services for events of all sizes, ensuring that every meal served meets our rigorous standards.
+                  </p>
+               </div>
+            </div>
+            <div className="md:w-1/2 order-1 md:order-2">
+              <h2 className="font-playfair text-3xl md:text-4xl font-bold text-foreground mb-6">
+                Our In-House Kitchen Facility
+              </h2>
+              <p className="text-lg text-muted-foreground mb-6">
+                We operate from our own fully equipped, in-house kitchen, allowing us complete control over quality, hygiene, and consistency. This dual capability allows us to offer unmatched reliability in corporate food services.
+              </p>
+              <ul className="space-y-4">
+                {[
+                  "Strict food safety and hygiene standards",
+                  "Fresh preparation for every event",
+                  "Consistent taste and presentation across all services",
+                  "Flexibility to customize menus for different occasions"
+                ].map((item, i) => (
+                  <li key={i} className="flex items-start">
+                    <CheckCircle className="h-5 w-5 text-primary mt-1 mr-3 flex-shrink-0" />
+                    <span className="text-foreground text-lg">{item}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </div>
@@ -149,7 +242,7 @@ const About = () => {
               Numbers that reflect our commitment to excellence
             </p>
           </div>
-           
+            
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
             {stats.map((stat, index) => (
               <div key={index} className="text-center">
@@ -165,7 +258,7 @@ const About = () => {
         </div>
       </section>
 
-      {/* NEW SECTION: Trusted By Industry Leaders */}
+      {/* Trusted By Industry Leaders */}
       <section className="section-padding bg-white">
         <div className="container-custom">
             <div className="text-center mb-12">
@@ -178,7 +271,7 @@ const About = () => {
             </div>
             
             {/* Logo Grid */}
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center justify-items-center">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center justify-items-center mb-16">
                 {clients.map((client, index) => (
                     <div key={index} className="w-full h-24 flex items-center justify-center grayscale hover:grayscale-0 transition-all duration-300 p-4">
                         <img 
@@ -188,6 +281,20 @@ const About = () => {
                         />
                     </div>
                 ))}
+            </div>
+
+            {/* NEW: Partners Image */}
+            <div className="mt-16 text-center border-t border-gray-100 pt-16">
+                <h3 className="font-playfair text-2xl md:text-3xl font-bold text-foreground mb-8">
+                    Our Partners
+                </h3>
+                <div className="flex justify-center">
+                    <img 
+                        src={PartnersImage} 
+                        alt="Our Partners - KFC, Domino's, Taco Bell and others" 
+                        className="rounded-lg shadow-md max-w-full md:max-w-4xl hover:scale-[1.01] transition-transform duration-300"
+                    />
+                </div>
             </div>
         </div>
       </section>
@@ -201,7 +308,7 @@ const About = () => {
           <p className="text-xl text-muted-foreground mb-12 max-w-3xl mx-auto">
             Our passionate leadership inspires excellence and ensures exceptional experiences for every event.
           </p>
-           
+            
           <div className="flex justify-center">
             <div className="card-premium p-6 text-center max-w-sm">
               <img 

@@ -13,7 +13,7 @@ import DevRevLogo from "../assets/devrev.png";
 
 // NEW IMAGE IMPORT
 // Please rename your uploaded WhatsApp image to 'partners.jpg' and put it in assets
-import PartnersImage from "../assets/partners.jpg"; 
+import PartnersImage from "../assets/partners.png"; 
 
 const About = () => {
   const values = [
